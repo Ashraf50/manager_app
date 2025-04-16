@@ -1,0 +1,12 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: "#03091E"
+  image: assets/img/android12_splash.png
+  
+  android_12:
+    image: assets/img/android12_splash.png
+    color: "#03091E"
+    
+  # dart run flutter_native_splash:create --path=native_splash.yaml
