@@ -36,8 +36,24 @@ class ServerFailure extends Failure {
       return ServerFailure('Your request was not found, please try later');
     } else if (statusCode == 500) {
       return ServerFailure('There is a problem with server, please try later');
-    } else if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
-      return ServerFailure(response['message']);
+    } else if (statusCode == 400 ||
+        statusCode == 401 ||
+        statusCode == 403 ||
+        statusCode == 422) {
+      if (response is Map<String, dynamic>) {
+        if (response.containsKey("data") &&
+            response["data"] is Map<String, dynamic>) {
+          final data = response["data"] as Map<String, dynamic>;
+          if (data.isNotEmpty) {
+            final firstError = data.values.first;
+            return ServerFailure(firstError.toString());
+          }
+        }
+        if (response.containsKey("message")) {
+          return ServerFailure(response["message"]);
+        }
+      }
+      return ServerFailure('Unexpected error occurred.');
     } else {
       return ServerFailure('There was an error , please try again');
     }

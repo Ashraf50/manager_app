@@ -8,4 +8,5 @@ class Assets {
   static const String chat = "assets/img/chat.svg";
   static const String addTicketian = "assets/img/add_ticketian.svg";
   static const String logout = "assets/img/logout.svg";
+  static const String users = "assets/img/users.svg";
 }

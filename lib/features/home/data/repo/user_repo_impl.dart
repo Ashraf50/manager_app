@@ -83,4 +83,3 @@ Failure handleDioFailure(DioException e) {
   }
   return ServerFailure('Unexpected error occurred. Please try again.');
 }
-

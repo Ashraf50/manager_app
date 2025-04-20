@@ -21,13 +21,24 @@ class UserInfoListTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    ClipOval(
-                      child: Image.network(
-                        state.userData.data!.avatar ??
-                            "https://tanzolymp.com/images/default-non-user-no-photo-1-768x768.jpg",
-                        height: 60,
-                        width: 60,
-                        fit: BoxFit.cover,
+                    InkWell(
+                      focusColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: () {
+                        context.push(
+                          '/photo_view',
+                          extra: state.userData.data!.avatar!,
+                        );
+                      },
+                      child: ClipOval(
+                        child: Image.network(
+                          state.userData.data!.avatar ??
+                              "https://tanzolymp.com/images/default-non-user-no-photo-1-768x768.jpg",
+                          height: 60,
+                          width: 60,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const SizedBox(

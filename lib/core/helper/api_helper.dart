@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../constant/app_strings.dart';
+import 'package:manager_app/core/constant/app_strings.dart';
 
 class ApiHelper {
   final Dio _dio = Dio();
@@ -8,7 +8,7 @@ class ApiHelper {
   ApiHelper() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        final token = await _secureStorage.read(key: 'refresh_token');
+        final token = await _secureStorage.read(key: 'auth_token');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
         }
@@ -65,10 +65,13 @@ class ApiHelper {
   }
 
   // GET method
-  Future<Response> get(String url, {Map<String, String>? headers}) async {
+  Future<Response> get(String url,
+      {Map<String, String>? headers,
+      Map<String, dynamic>? queryParameters}) async {
     try {
       return await _dio.get(
         url,
+        queryParameters: queryParameters,
         options: Options(headers: headers),
       );
     } catch (e) {

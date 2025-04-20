@@ -2,45 +2,66 @@ import 'package:flutter/material.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
+import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/widget/status_button.dart';
 
 class TicketsDetailsView extends StatelessWidget {
-  const TicketsDetailsView({super.key});
+  final TicketModel ticket;
+  const TicketsDetailsView({super.key, required this.ticket});
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: "Ticket Details"),
+      appBar: const CustomAppBar(
+        title: "Ticket Details",
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
           children: [
-            const CircleAvatar(
-              radius: 100,
-              backgroundImage: AssetImage("assets/img/profile.jpg"),
-            ),
             const SizedBox(
               height: 10,
             ),
-            Center(
-              child: Text(
-                "Alaa Salem",
-                style: AppStyles.textStyle18black,
-              ),
+            CustomWidget(
+              title: "User name: ",
+              subTitle: ticket.user?.name ?? "N/A",
+            ),
+            CustomWidget(
+              title: "Service name: ",
+              subTitle: ticket.service?.name ?? "N/A",
+            ),
+            CustomWidget(
+              title: "Manager name: ",
+              subTitle: ticket.manager?.user?.name ?? "N/A",
+            ),
+            CustomWidget(
+              title: "Ticketian name: ",
+              subTitle: ticket.technician?.user?.name ?? "N/A",
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              "Ticket Details:",
+              "Title:",
               style: AppStyles.textStyle18bold,
             ),
             SelectableText(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ali",
+              ticket.title ?? "No Title",
               style: AppStyles.textStyle18black,
             ),
             const SizedBox(
-              height: 10,
+              height: 8,
+            ),
+            Text(
+              "Details:",
+              style: AppStyles.textStyle18bold,
+            ),
+            SelectableText(
+              ticket.description ?? "No Details Available",
+              style: AppStyles.textStyle18black,
+            ),
+            const SizedBox(
+              height: 8,
             ),
             Row(
               children: [
@@ -51,11 +72,44 @@ class TicketsDetailsView extends StatelessWidget {
                 const SizedBox(
                   width: 30,
                 ),
-                const StatusButton()
+                StatusButton(
+                  status: ticket.status!,
+                ),
               ],
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CustomWidget extends StatelessWidget {
+  final String title;
+  final String subTitle;
+  const CustomWidget({
+    super.key,
+    required this.title,
+    required this.subTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: AppStyles.textStyle18bold,
+          ),
+          Expanded(
+            child: SelectableText(
+              subTitle,
+              style: AppStyles.textStyle18black,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
+import 'package:manager_app/features/home/presentation/view/widget/profile_photo.dart';
 import '../../../../../core/constant/app_colors.dart';
 import '../../../../../core/constant/app_styles.dart';
 import '../../../../../core/constant/func/get_token.dart';
@@ -13,7 +14,6 @@ import '../../../../../core/widget/custom_button.dart';
 import '../../../../../core/widget/custom_text_field.dart';
 import '../../../../../core/widget/custom_toast.dart';
 import '../../view_model/cubit/user_data_cubit.dart';
-import '../../../../all_tickets/presentation/view/widget/profile_photo.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({super.key});
@@ -28,7 +28,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   final TextEditingController phoneController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   File? avatar;
-    @override
+  @override
   void initState() {
     super.initState();
     nameController.addListener(() {

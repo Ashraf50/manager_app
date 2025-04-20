@@ -33,6 +33,7 @@ class AuthRepoImpl implements AuthRepo {
   Future<bool> isLoggedIn() async {
     return await secureStorage.containsKey(key: 'auth_token');
   }
+
   @override
   Future<void> logout() async {
     await secureStorage.delete(key: 'auth_token');

@@ -95,7 +95,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           } else if (result['type'] == 'success') {
             final user = result['data']['user'];
             if (user != null && user['type'] != 2) {
-              emit(VerifyCodeFailure(errMessage: 'This account is not a manager.'));
+              emit(VerifyCodeFailure(
+                  errMessage: 'This account is not a manager.'));
               return;
             }
             emit(VerifyCodeSuccess(successMessage: result['message']));
