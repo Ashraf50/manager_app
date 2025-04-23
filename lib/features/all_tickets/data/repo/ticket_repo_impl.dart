@@ -6,12 +6,14 @@ import 'package:manager_app/core/helper/api_helper.dart';
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/data/repo/ticket_repo.dart';
 import '../../../../core/constant/app_strings.dart';
+import '../model/pagination_response.dart';
 
 class TicketRepoImpl implements TicketRepo {
   ApiHelper apiHelper;
   TicketRepoImpl(this.apiHelper);
   @override
-  Future<Either<Failure, List<TicketModel>>> fetchAllTickets() async {
+  Future<Either<Failure, PaginatedTicketsResponse>> fetchAllTickets(
+      {int page = 1}) async {
     try {
       final token = await getToken();
       var response = await apiHelper.get(
@@ -19,11 +21,18 @@ class TicketRepoImpl implements TicketRepo {
         headers: {
           'Authorization': 'Bearer $token',
         },
+        queryParameters: {'page': page},
       );
       var data = response.data;
       var ticketsList =
           (data["data"] as List).map((e) => TicketModel.fromJson(e)).toList();
-      return Right(ticketsList);
+      var meta = data["meta"];
+      return Right(PaginatedTicketsResponse(
+        tickets: ticketsList,
+        currentPage: meta['current_page'],
+        lastPage: meta['last_page'],
+        total: meta['total'],
+      ));
     } catch (e) {
       if (e is DioException) {
         return Left(ServerFailure.fromDiorError(e));
@@ -56,6 +65,51 @@ class TicketRepoImpl implements TicketRepo {
       var ticketsList =
           (data["data"] as List).map((e) => TicketModel.fromJson(e)).toList();
       return Right(ticketsList);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDiorError(e));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> assignTicket({
+    required int ticketId,
+    required int ticketianId,
+  }) async {
+    try {
+      final token = await getToken();
+      await apiHelper.post(
+        '${AppStrings.baseUrl}/api/managers/tickets/$ticketId/assign',
+        {
+          "technician_id": ticketianId,
+        },
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return const Right(unit);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDiorError(e));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> finishTicket({required int ticketId}) async {
+    try {
+      final token = await getToken();
+      await apiHelper.post(
+        '${AppStrings.baseUrl}/api/managers/tickets/$ticketId/finish',
+        null,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return const Right(unit);
     } catch (e) {
       if (e is DioException) {
         return Left(ServerFailure.fromDiorError(e));

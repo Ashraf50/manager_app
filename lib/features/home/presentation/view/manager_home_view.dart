@@ -1,7 +1,10 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/all_tickets.dart';
 import 'package:manager_app/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:manager_app/features/home/presentation/view/widget/manager_drawer.dart';
+import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
 import '../../../add_ticketian/presentation/view/add_ticketian_view.dart';
 import '../../../chat/presentation/view/chat_view.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +39,31 @@ class _ManagerHomeViewState extends State<ManagerHomeView> {
           'Chat',
           'Add Ticketian'
         ][widget.selectedIndex],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: BlocBuilder<NotificationCubit, NotificationState>(
+              builder: (context, state) {
+                if (state is FetchNotificationSuccess) {
+                  return IconButton(
+                    onPressed: () {
+                      context.push('/notification_view');
+                    },
+                    icon: Badge.count(
+                      count: state.notifications.where((n) => !n.seen!).length,
+                      child: const Icon(
+                        Icons.notifications,
+                        size: 27,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
+          )
+        ],
       ),
       drawer: ManagerDrawer(
         activeIndex: widget.selectedIndex,

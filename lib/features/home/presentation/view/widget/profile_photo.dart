@@ -6,12 +6,14 @@ import 'package:manager_app/features/home/presentation/view/widget/change_phot_b
 
 class ProfilePhoto extends StatelessWidget {
   final File? avatar;
+  final String image;
   final Function(File) onImagePicked;
 
   const ProfilePhoto({
     super.key,
     required this.avatar,
     required this.onImagePicked,
+    required this.image,
   });
 
   Future<void> _pickImage(BuildContext context, ImageSource source) async {
@@ -35,9 +37,9 @@ class ProfilePhoto extends StatelessWidget {
                   radius: 80,
                   backgroundImage: FileImage(avatar!),
                 )
-              : const CircleAvatar(
+              : CircleAvatar(
                   radius: 80,
-                  backgroundImage: AssetImage("assets/img/add_image.png"),
+                  backgroundImage: NetworkImage(image),
                 ),
           Positioned(
             bottom: -3,

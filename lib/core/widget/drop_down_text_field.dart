@@ -1,22 +1,18 @@
-import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ticketian_model.dart';
+import '../constant/app_colors.dart';
 
-class DropdownTextField extends StatefulWidget {
-  const DropdownTextField({super.key});
+class DropdownTextField extends StatelessWidget {
+  final List<TicketianModel> ticketian;
+  final ValueChanged<TicketianModel> onChanged;
+  final TicketianModel? selectedTicketian;
+  const DropdownTextField({
+    super.key,
+    required this.ticketian,
+    required this.onChanged,
+    required this.selectedTicketian,
+  });
 
-  @override
-  State<DropdownTextField> createState() => _DropdownTextFieldState();
-}
-
-class _DropdownTextFieldState extends State<DropdownTextField> {
-  String? selectedDepartment;
-  final List<String> departments = [
-    'Marketing',
-    'Sales',
-    'Engineering',
-    'Human Resources',
-    'Finance'
-  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,27 +21,22 @@ class _DropdownTextFieldState extends State<DropdownTextField> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
+        child: DropdownButton<TicketianModel>(
           isExpanded: true,
-          dropdownColor: Colors.white,
-          value: selectedDepartment,
-          hint: Text(
-            'Select department',
-            style: AppStyles.textStyle16,
-          ),
+          value: selectedTicketian,
+          dropdownColor: AppColors.white,
+          hint: const Text('Select ticketian'),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-          items: departments.map((String department) {
-            return DropdownMenuItem<String>(
-              value: department,
-              child: Text(department),
+          items: ticketian.map((ticketian) {
+            return DropdownMenuItem<TicketianModel>(
+              value: ticketian,
+              child: Text(ticketian.user!.name!),
             );
           }).toList(),
-          onChanged: (String? newValue) {
-            setState(
-              () {
-                selectedDepartment = newValue;
-              },
-            );
+          onChanged: (record) {
+            if (record != null) {
+              onChanged(record);
+            }
           },
         ),
       ),

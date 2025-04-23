@@ -9,7 +9,8 @@ import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit
 import 'package:manager_app/features/all_tickets/data/repo/ticket_repo_impl.dart';
 import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
 import 'package:manager_app/features/home/presentation/view_model/cubit/user_data_cubit.dart';
-
+import 'package:manager_app/features/notification/data/repo/notification_repo_impl.dart';
+import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
 import 'core/helper/api_helper.dart';
 import 'features/Auth/presentation/view_model/bloc/auth_bloc.dart';
 import 'features/home/data/repo/user_repo_impl.dart';
@@ -34,13 +35,18 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               UserDataCubit(UserRepoImpl(ApiHelper()))..fetchUserData(token),
         ),
-          BlocProvider(
-          create: (context) =>
-              AddTicketianCubit(TicketianRepoImpl(ApiHelper()))..fetchTicketian(),
+        BlocProvider(
+          create: (context) => AddTicketianCubit(TicketianRepoImpl(ApiHelper()))
+            ..fetchTicketian(),
         ),
         BlocProvider(
           create: (context) =>
               TicketCubit(TicketRepoImpl(ApiHelper()))..fetchTickets(),
+        ),
+        BlocProvider(
+          create: (context) =>
+              NotificationCubit(NotificationRepoImpl(ApiHelper()))
+                ..fetchNotifications(),
         )
       ],
       child: ScreenUtilInit(

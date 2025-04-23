@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../view_model/cubit/user_data_cubit.dart';
 
 class UserInfoListTile extends StatelessWidget {
@@ -55,7 +54,10 @@ class UserInfoListTile extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
-                    context.push("/edit_profile");
+                    context.push(
+                      "/edit_profile",
+                      extra: state.userData,
+                    );
                   },
                   icon: const Icon(Icons.edit),
                 )

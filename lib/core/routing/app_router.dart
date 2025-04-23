@@ -3,9 +3,12 @@ import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ti
 import 'package:manager_app/features/add_ticketian/presentation/view/widget/add_new_ticketian.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view/widget/ticketian_details_view.dart';
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
+import 'package:manager_app/features/all_tickets/presentation/view/widget/assign_ticket_view.dart';
 import 'package:manager_app/features/home/presentation/view/widget/edit_profile_view.dart';
+import 'package:manager_app/features/notification/presentation/view/notification_view.dart';
 import '../../features/Auth/presentation/view/forget_password_view.dart';
 import '../../features/Auth/presentation/view/sign_in_view.dart';
+import '../../features/home/data/model/user_model/user_model.dart';
 import '../widget/photo_view.dart';
 import '../../features/home/presentation/view/manager_home_view.dart';
 import 'package:go_router/go_router.dart';
@@ -54,12 +57,26 @@ class AppRouter {
             return PhotoViewer(image: image);
           }),
       GoRoute(
-        path: '/edit_profile',
-        builder: (context, state) => const EditProfileView(),
-      ),
+          path: '/edit_profile',
+          builder: (context, state) {
+            var userData = state.extra as UserModel;
+            return EditProfileView(user: userData);
+          }),
+      GoRoute(
+          path: '/assign_ticket',
+          builder: (context, state) {
+            var id = state.extra as int;
+            return AssignTicketView(
+              ticketId: id,
+            );
+          }),
       GoRoute(
         path: '/add_new_ticketian',
         builder: (context, state) => const AddNewTicketian(),
+      ),
+      GoRoute(
+        path: '/notification_view',
+        builder: (context, state) => const NotificationView(),
       ),
     ],
   );

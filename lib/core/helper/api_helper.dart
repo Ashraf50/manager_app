@@ -106,4 +106,18 @@ class ApiHelper {
       rethrow;
     }
   }
+
+  // PATCH method
+  Future<Response> patch(String url,
+      {dynamic data, Map<String, String>? headers}) async {
+    try {
+      return await _dio.patch(
+        url,
+        data: data,
+        options: Options(headers: headers),
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
