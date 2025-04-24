@@ -12,13 +12,14 @@ class AllNotificationsListView extends StatefulWidget {
 }
 
 class _AllNotificationsListViewState extends State<AllNotificationsListView> {
-  final _scrollController = ScrollController();
-
+  late ScrollController _scrollController;
+  late NotificationCubit notificationCubit;
   @override
   void initState() {
     super.initState();
+    notificationCubit = context.read<NotificationCubit>();
+    _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-    context.read<NotificationCubit>().fetchNotifications();
   }
 
   @override
@@ -29,15 +30,16 @@ class _AllNotificationsListViewState extends State<AllNotificationsListView> {
   }
 
   void _onScroll() {
-    print(
-        "Scrolling... Position: ${_scrollController.position.pixels}, Max: ${_scrollController.position.maxScrollExtent}");
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 10 &&
-        !context.read<NotificationCubit>().isFetching &&
-        context.read<NotificationCubit>().hasMore) {
-      print("Fetching more tickets...");
-      context.read<NotificationCubit>().fetchNotifications(loadMore: true);
+    if (_isBottom) {
+      notificationCubit.loadMoreNotifications();
     }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    return currentScroll >= (maxScroll * 0.95);
   }
 
   @override
@@ -45,19 +47,10 @@ class _AllNotificationsListViewState extends State<AllNotificationsListView> {
     return BlocBuilder<NotificationCubit, NotificationState>(
       builder: (context, state) {
         if (state is FetchNotificationSuccess) {
-          print(
-              "notification count: ${state.notifications.length}, hasMore: ${state.hasMore}");
           return ListView.builder(
             controller: _scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: state.notifications.length + (state.hasMore ? 1 : 0),
+            itemCount: state.notifications.length,
             itemBuilder: (context, index) {
-              if (index >= state.notifications.length) {
-                return const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              }
               return InkWell(
                 onTap: () {
                   // context.push(

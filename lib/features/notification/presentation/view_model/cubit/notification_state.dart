@@ -6,18 +6,23 @@ final class NotificationInitial extends NotificationState {}
 
 final class FetchNotificationLoading extends NotificationState {}
 
-final class FetchNotificationLoadingMore extends NotificationState {}
+final class FetchNotificationEmpty extends NotificationState {}
 
 final class FetchNotificationSuccess extends NotificationState {
   final List<NotificationModel> notifications;
   final bool hasMore;
   FetchNotificationSuccess({
     required this.notifications,
-    this.hasMore = false,
+    required this.hasMore,
   });
 }
 
 final class FetchNotificationFailure extends NotificationState {
   final String errMessage;
-  FetchNotificationFailure({required this.errMessage});
+  final List<NotificationModel>? currentNotifications;
+
+  FetchNotificationFailure({
+    required this.errMessage,
+    this.currentNotifications,
+  });
 }

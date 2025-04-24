@@ -12,13 +12,15 @@ class AllTicketsListView extends StatefulWidget {
 }
 
 class _AllTicketsListViewState extends State<AllTicketsListView> {
-  final _scrollController = ScrollController();
+  late ScrollController _scrollController;
+  late TicketCubit ticketCubit;
 
   @override
   void initState() {
     super.initState();
+    ticketCubit = context.read<TicketCubit>();
+    _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
-    context.read<TicketCubit>().fetchTickets();
   }
 
   @override
@@ -29,15 +31,16 @@ class _AllTicketsListViewState extends State<AllTicketsListView> {
   }
 
   void _onScroll() {
-    print(
-        "Scrolling... Position: ${_scrollController.position.pixels}, Max: ${_scrollController.position.maxScrollExtent}");
-    if (_scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent - 10 &&
-        !context.read<TicketCubit>().isFetching &&
-        context.read<TicketCubit>().hasMore) {
-      print("Fetching more tickets...");
-      context.read<TicketCubit>().fetchTickets(loadMore: true);
+    if (_isBottom) {
+      ticketCubit.loadMoreTickets();
     }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    return currentScroll >= (maxScroll * 0.95);
   }
 
   @override
@@ -55,28 +58,20 @@ class _AllTicketsListViewState extends State<AllTicketsListView> {
         child: BlocBuilder<TicketCubit, TicketState>(
           builder: (context, state) {
             if (state is FetchTicketSuccess) {
-              print(
-                  "Tickets count: ${state.tickets.length}, hasMore: ${state.hasMore}");
               return ListView.builder(
                 controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: state.tickets.length + (state.hasMore ? 1 : 0),
+                itemCount: state.tickets.length,
                 itemBuilder: (context, index) {
-                  if (index >= state.tickets.length) {
-                    return const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  }
+                  final tickets = state.tickets[index];
                   return InkWell(
                     onTap: () {
                       context.push(
                         "/ticket_details",
-                        extra: state.tickets[index],
+                        extra: tickets,
                       );
                     },
                     child: TicketCard(
-                      ticket: state.tickets[index],
+                      ticket: tickets,
                     ),
                   );
                 },

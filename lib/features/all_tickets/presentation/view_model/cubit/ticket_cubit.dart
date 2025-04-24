@@ -9,47 +9,37 @@ class TicketCubit extends Cubit<TicketState> {
   int currentPage = 1;
   bool hasMore = true;
   bool isFetching = false;
-
   TicketCubit(this.ticketRepo) : super(TicketInitial());
 
-  Future<void> fetchTickets({bool loadMore = false}) async {
-    if (isFetching || (loadMore && !hasMore)) return;
-
+  Future<void> fetchTickets({bool loadMore = false, bool reset = false}) async {
+    if (isFetching || (!hasMore && !reset)) return;
     isFetching = true;
-
-    if (loadMore) {
-      emit(FetchTicketLoadingMore());
-    } else {
+    if (reset) {
+      allTickets = [];
       currentPage = 1;
+      hasMore = true;
+    }
+    if (!loadMore || reset) {
       emit(FetchTicketLoading());
     }
+    try {
+      final fetchedTickets =
+          await ticketRepo.fetchAllTickets(page: currentPage);
+      if (fetchedTickets.isEmpty) {
+        hasMore = false;
+      } else {
+        allTickets = [...allTickets, ...fetchedTickets];
+        currentPage++;
+      }
+      emit(FetchTicketSuccess(tickets: List.from(allTickets)));
+    } catch (e) {
+      emit(FetchTicketFailure(errMessage: "Failed to load tickets"));
+    }
+    isFetching = false;
+  }
 
-    var result = await ticketRepo.fetchAllTickets(page: currentPage);
-
-    result.fold(
-      (failure) {
-        isFetching = false;
-        print("Fetch failed: ${failure.errMessage}");
-        emit(FetchTicketFailure(errMessage: failure.errMessage));
-      },
-      (response) {
-        isFetching = false;
-        print("Fetched ${response.tickets.length} tickets");
-        if (loadMore) {
-          allTickets.addAll(response.tickets);
-        } else {
-          allTickets = response.tickets;
-        }
-        hasMore = response.currentPage < response.lastPage ||
-            response.tickets.length < response.total;
-        currentPage = response.currentPage + 1;
-        print("hasMore: $hasMore, currentPage: $currentPage");
-        emit(FetchTicketSuccess(
-          tickets: allTickets,
-          hasMore: hasMore,
-        ));
-      },
-    );
+  void loadMoreTickets() {
+    fetchTickets(loadMore: true);
   }
 
   Future<void> fetchSortedTickets(
@@ -80,7 +70,7 @@ class TicketCubit extends Cubit<TicketState> {
         return false;
       },
       (_) async {
-        await fetchTickets();
+        await fetchTickets(reset: true);
         return true;
       },
     );
@@ -99,7 +89,7 @@ class TicketCubit extends Cubit<TicketState> {
         return false;
       },
       (_) async {
-        await fetchTickets();
+        await fetchTickets(reset: true);
         return true;
       },
     );

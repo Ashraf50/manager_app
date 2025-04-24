@@ -2,11 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:manager_app/core/error/failure.dart';
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 
-import '../model/pagination_response.dart';
-
 abstract class TicketRepo {
-  Future<Either<Failure, PaginatedTicketsResponse>> fetchAllTickets(
-      {int page = 1});
+  Future<List<TicketModel>> fetchAllTickets({int page = 1});
   Future<Either<Failure, List<TicketModel>>> sortTicket({
     required String from,
     required String to,

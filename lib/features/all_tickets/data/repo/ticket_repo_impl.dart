@@ -6,18 +6,16 @@ import 'package:manager_app/core/helper/api_helper.dart';
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/data/repo/ticket_repo.dart';
 import '../../../../core/constant/app_strings.dart';
-import '../model/pagination_response.dart';
 
 class TicketRepoImpl implements TicketRepo {
   ApiHelper apiHelper;
   TicketRepoImpl(this.apiHelper);
   @override
-  Future<Either<Failure, PaginatedTicketsResponse>> fetchAllTickets(
-      {int page = 1}) async {
+  Future<List<TicketModel>> fetchAllTickets({int page = 1}) async {
     try {
       final token = await getToken();
       var response = await apiHelper.get(
-        '${AppStrings.baseUrl}/api/managers/tickets',
+        '${AppStrings.baseUrl}/api/managers/tickets?per_page=10',
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -26,18 +24,11 @@ class TicketRepoImpl implements TicketRepo {
       var data = response.data;
       var ticketsList =
           (data["data"] as List).map((e) => TicketModel.fromJson(e)).toList();
-      var meta = data["meta"];
-      return Right(PaginatedTicketsResponse(
-        tickets: ticketsList,
-        currentPage: meta['current_page'],
-        lastPage: meta['last_page'],
-        total: meta['total'],
-      ));
+
+      return ticketsList;
     } catch (e) {
-      if (e is DioException) {
-        return Left(ServerFailure.fromDiorError(e));
-      }
-      return Left(ServerFailure(e.toString()));
+      print("Error fetching tickets: $e");
+      return [];
     }
   }
 

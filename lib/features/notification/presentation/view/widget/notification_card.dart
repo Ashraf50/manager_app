@@ -103,7 +103,7 @@ class NotificationCard extends StatelessWidget {
                   .deleteNotification(notification.id!);
               SmartDialog.dismiss();
             },
-            child: const Text('Finish', style: TextStyle(color: Colors.red)),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

@@ -4,69 +4,142 @@ import 'package:manager_app/features/notification/data/repo/notification_repo.da
 part 'notification_state.dart';
 
 class NotificationCubit extends Cubit<NotificationState> {
-  NotificationRepo notificationRepo;
+  final NotificationRepo notificationRepo;
   List<NotificationModel> allNotification = [];
   int currentPage = 1;
   bool hasMore = true;
   bool isFetching = false;
   NotificationCubit(this.notificationRepo) : super(NotificationInitial());
-  Future<void> fetchNotifications({bool loadMore = false}) async {
-    if (isFetching || (loadMore && !hasMore)) return;
+
+  Future<void> fetchNotifications({
+    bool loadMore = false,
+    bool reset = false,
+  }) async {
+    if (isFetching) return;
+    if (!hasMore && loadMore) return;
     isFetching = true;
-    if (loadMore) {
-      emit(FetchNotificationLoadingMore());
-    } else {
-      currentPage = 1;
-      emit(FetchNotificationLoading());
-    }
-    var result =
-        await notificationRepo.fetchAllNotifications(page: currentPage);
-    result.fold(
-      (failure) {
-        isFetching = false;
-        emit(FetchNotificationFailure(errMessage: failure.errMessage));
-      },
-      (response) {
-        isFetching = false;
-        if (loadMore) {
-          allNotification.addAll(response.notifications);
+    try {
+      if (reset) {
+        currentPage = 1;
+        hasMore = true;
+        allNotification.clear();
+        emit(FetchNotificationLoading());
+      } else if (!loadMore) {
+        emit(FetchNotificationLoading());
+      }
+      final fetchedNotifications = await notificationRepo.fetchAllNotifications(
+        page: currentPage,
+      );
+      if (fetchedNotifications.isEmpty) {
+        hasMore = false;
+        if (currentPage == 1) {
+          emit(FetchNotificationEmpty());
         } else {
-          allNotification = response.notifications;
+          emit(
+            FetchNotificationSuccess(
+              notifications: List.from(allNotification),
+              hasMore: false,
+            ),
+          );
         }
-        hasMore = response.currentPage < response.lastPage ||
-            response.notifications.length < response.total;
-        currentPage = response.currentPage + 1;
+      } else {
+        allNotification.addAll(fetchedNotifications);
+        currentPage++;
         emit(FetchNotificationSuccess(
-          notifications: allNotification,
-          hasMore: hasMore,
+          notifications: List.from(allNotification),
+          hasMore: true,
         ));
-      },
-    );
+      }
+    } catch (e) {
+      emit(FetchNotificationFailure(
+        errMessage: "Failed to load notifications",
+        currentNotifications: loadMore ? List.from(allNotification) : null,
+      ));
+    } finally {
+      isFetching = false;
+    }
+  }
+
+  void loadMoreNotifications() {
+    if (!isFetching && hasMore) {
+      fetchNotifications(loadMore: true);
+    }
   }
 
   Future<void> deleteNotification(String id) async {
-    emit(FetchNotificationLoading());
-    var result = await notificationRepo.deleteNotification(id);
-    result.fold(
-      (failure) {
-        emit(FetchNotificationFailure(errMessage: failure.errMessage));
-      },
-      (_) async {
-        await fetchNotifications();
-      },
+    final currentState = state;
+
+    allNotification.removeWhere((notification) => notification.id == id);
+    emit(
+      FetchNotificationSuccess(
+        notifications: List.from(allNotification),
+        hasMore: hasMore,
+      ),
     );
+
+    try {
+      final result = await notificationRepo.deleteNotification(id);
+      result.fold(
+        (failure) {
+          emit(currentState);
+          emit(FetchNotificationFailure(
+            errMessage: failure.errMessage,
+            currentNotifications: List.from(allNotification),
+          ));
+        },
+        (_) {
+          fetchNotifications(reset: true);
+        },
+      );
+    } catch (e) {
+      emit(currentState);
+      emit(
+        FetchNotificationFailure(
+          errMessage: "Failed to delete notification",
+          currentNotifications: List.from(allNotification),
+        ),
+      );
+    }
   }
 
   Future<void> readNotification(String id) async {
-    emit(FetchNotificationLoading());
-    var result = await notificationRepo.markNotificationAsRead(id);
-    result.fold(
-      (failure) {
-        emit(FetchNotificationFailure(errMessage: failure.errMessage));
-      },
-      (_) async {
-        await fetchNotifications();
-      },
-    );
+    final currentState = state;
+    final index = allNotification.indexWhere((n) => n.id == id);
+    if (index != -1) {
+      final updatedNotification = allNotification[index].copyWith(seen: true);
+      allNotification[index] = updatedNotification;
+      emit(
+        FetchNotificationSuccess(
+          notifications: List.from(allNotification),
+          hasMore: hasMore,
+        ),
+      );
+    }
+
+    try {
+      final result = await notificationRepo.markNotificationAsRead(id);
+      result.fold(
+        (failure) {
+          emit(currentState);
+          emit(
+            FetchNotificationFailure(
+              errMessage: failure.errMessage,
+              currentNotifications: List.from(allNotification),
+            ),
+          );
+        },
+        (_) {
+          fetchNotifications(reset: true);
+        },
+      );
+    } catch (e) {
+      emit(currentState);
+      emit(
+        FetchNotificationFailure(
+          errMessage: "Failed to mark notification as read",
+          currentNotifications: List.from(allNotification),
+        ),
+      );
+    }
   }
 }

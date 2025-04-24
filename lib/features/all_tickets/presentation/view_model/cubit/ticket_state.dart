@@ -6,14 +6,10 @@ final class TicketInitial extends TicketState {}
 
 final class FetchTicketLoading extends TicketState {}
 
-final class FetchTicketLoadingMore extends TicketState {}
-
 final class FetchTicketSuccess extends TicketState {
   final List<TicketModel> tickets;
-  final bool hasMore;
   FetchTicketSuccess({
     required this.tickets,
-    this.hasMore = false,
   });
 }
 

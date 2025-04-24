@@ -40,4 +40,21 @@ class NotificationModel {
         'body': body,
         'data': data?.toJson(),
       };
+  NotificationModel copyWith({
+    String? id,
+    String? title,
+    DateTime? createdAt,
+    bool? seen,
+    String? body,
+    Data? data,
+  }) {
+    return NotificationModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      createdAt: createdAt ?? this.createdAt,
+      seen: seen ?? this.seen,
+      body: body ?? this.body,
+      data: data ?? this.data,
+    );
+  }
 }
