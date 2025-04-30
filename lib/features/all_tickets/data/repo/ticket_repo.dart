@@ -7,7 +7,7 @@ abstract class TicketRepo {
   Future<Either<Failure, List<TicketModel>>> sortTicket({
     required String from,
     required String to,
-    required int serviceId,
+    required int ticketianId,
   });
   Future<Either<Failure, Unit>> assignTicket({
     required int ticketId,

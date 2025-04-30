@@ -4,7 +4,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/constant/func/data_format.dart';
 import 'package:manager_app/features/notification/data/model/notification_model/notification_model.dart';
-import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
+import 'package:manager_app/features/notification/presentation/view_model/cubit/read_notification_cubit.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
@@ -69,7 +69,7 @@ class NotificationCard extends StatelessWidget {
                   onSelected: (value) {
                     if (value == 'read') {
                       context
-                          .read<NotificationCubit>()
+                          .read<ReadNotificationCubit>()
                           .readNotification(notification.id!);
                     } else if (value == 'delete') {
                       _showFinishDialog(context);
@@ -99,7 +99,7 @@ class NotificationCard extends StatelessWidget {
           TextButton(
             onPressed: () {
               context
-                  .read<NotificationCubit>()
+                  .read<ReadNotificationCubit>()
                   .deleteNotification(notification.id!);
               SmartDialog.dismiss();
             },

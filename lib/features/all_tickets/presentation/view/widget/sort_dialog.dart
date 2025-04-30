@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
+import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ticketian_model.dart';
+import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
+import '../../../../../core/widget/drop_down_text_field.dart';
+import '../../view_model/cubit/ticket_cubit.dart';
 
 class SortDialog extends StatefulWidget {
   const SortDialog({super.key});
@@ -13,9 +16,11 @@ class SortDialog extends StatefulWidget {
 class SortDialogState extends State<SortDialog> {
   final TextEditingController fromController = TextEditingController();
   final TextEditingController toController = TextEditingController();
-  final TextEditingController serviceIdController = TextEditingController();
+  int? selectedTicketianId;
+  TicketianModel? selectedTicketian;
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -24,8 +29,7 @@ class SortDialogState extends State<SortDialog> {
     );
     if (picked != null) {
       setState(() {
-        fromController.text = DateFormat('yyyy-MM-dd').format(picked);
-        toController.text = DateFormat('yyyy-MM-dd').format(picked);
+        controller.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
   }
@@ -33,39 +37,61 @@ class SortDialogState extends State<SortDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Sort Tickets"),
+      title: const Text("Filter Tickets"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           GestureDetector(
-            onTap: () => _selectDate(context),
+            onTap: () => _selectDate(context, fromController),
             child: AbsorbPointer(
               child: TextField(
                 controller: fromController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
                   labelText: "from",
-                  suffixIcon: Icon(Icons.calendar_today),
-                ),
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () => _selectDate(context),
-            child: AbsorbPointer(
-              child: TextField(
-                controller: toController,
-                decoration: const InputDecoration(
-                  labelText: "to",
-                  suffixIcon: Icon(Icons.calendar_today),
+                  suffixIcon: const Icon(Icons.calendar_today),
                 ),
               ),
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: serviceIdController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: "Enter service ID"),
+          GestureDetector(
+            onTap: () => _selectDate(context, toController),
+            child: AbsorbPointer(
+              child: TextField(
+                controller: toController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  labelText: "to",
+                  suffixIcon: const Icon(Icons.calendar_today),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          BlocBuilder<AddTicketianCubit, AddTicketianState>(
+            builder: (context, state) {
+              if (state is FetchAllTicketianLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is FetchAllTicketianFailure) {
+                return Text(state.errMessage);
+              } else if (state is FetchAllTicketianSuccess) {
+                return DropdownTextField(
+                  ticketian: state.ticketian,
+                  selectedTicketian: selectedTicketian,
+                  onChanged: (record) {
+                    setState(() {
+                      selectedTicketian = record;
+                      selectedTicketianId = record.id;
+                    });
+                  },
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
           ),
         ],
       ),
@@ -74,13 +100,12 @@ class SortDialogState extends State<SortDialog> {
           onPressed: () {
             String from = fromController.text;
             String to = toController.text;
-            int serviceId = int.tryParse(serviceIdController.text) ?? 0;
-            context
-                .read<TicketCubit>()
-                .fetchSortedTickets(from: from, to: to, serviceId: serviceId);
+            int ticketianId = selectedTicketianId ?? 0;
+            context.read<TicketCubit>().fetchSortedTickets(
+                from: from, to: to, ticketianId: ticketianId);
             Navigator.of(context).pop();
           },
-          child: const Text("Sort"),
+          child: const Text("Apply"),
         ),
         TextButton(
           onPressed: () {

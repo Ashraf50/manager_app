@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ticketian_model.dart';
 import 'package:manager_app/features/add_ticketian/data/repo/ticketian_repo.dart';
+import '../../../../../core/widget/custom_toast.dart';
 part 'add_ticketian_state.dart';
 
 class AddTicketianCubit extends Cubit<AddTicketianState> {
@@ -24,33 +26,6 @@ class AddTicketianCubit extends Cubit<AddTicketianState> {
     );
   }
 
-  Future<bool> createTicketian({
-    required String name,
-    required String email,
-    required String password,
-    required String confirmPass,
-    required String phone,
-  }) async {
-    emit(FetchAllTicketianLoading());
-    final result = await ticketianRepo.createTicketian(
-      name: name,
-      email: email,
-      phone: phone,
-      password: password,
-      confirmPass: confirmPass,
-    );
-    return result.fold(
-      (failure) {
-        emit(FetchAllTicketianFailure(errMessage: failure.errMessage));
-        return false;
-      },
-      (_) async {
-        await fetchTicketian();
-        return true;
-      },
-    );
-  }
-
   Future<void> searchTicketian(String name) async {
     emit(FetchAllTicketianLoading());
     var result = await ticketianRepo.searchTicketian(name: name);
@@ -69,7 +44,9 @@ class AddTicketianCubit extends Cubit<AddTicketianState> {
     var result = await ticketianRepo.deleteTicketian(id);
     result.fold(
       (failure) {
-        emit(FetchAllTicketianFailure(errMessage: failure.errMessage));
+        CustomToast.show(
+            message: failure.errMessage, backgroundColor: Colors.red);
+        fetchTicketian();
       },
       (_) async {
         await fetchTicketian();
@@ -96,7 +73,9 @@ class AddTicketianCubit extends Cubit<AddTicketianState> {
     );
     result.fold(
       (failure) {
-        emit(FetchAllTicketianFailure(errMessage: failure.errMessage));
+        CustomToast.show(
+            message: failure.errMessage, backgroundColor: Colors.red);
+        fetchTicketian();
       },
       (_) async {
         await fetchTicketian();

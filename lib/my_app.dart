@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:manager_app/features/Auth/data/repo/auth_repo_impl.dart';
 import 'package:manager_app/features/add_ticketian/data/repo/ticketian_repo_impl.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
+import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/create_ticketian_cubit.dart';
 import 'package:manager_app/features/all_tickets/data/repo/ticket_repo_impl.dart';
 import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
 import 'package:manager_app/features/home/presentation/view_model/cubit/user_data_cubit.dart';
@@ -47,7 +48,10 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               NotificationCubit(NotificationRepoImpl(ApiHelper()))
                 ..fetchNotifications(),
-        )
+        ),
+        BlocProvider(
+            create: (context) =>
+                CreateTicketianCubit(TicketianRepoImpl(ApiHelper()))),
       ],
       child: ScreenUtilInit(
         minTextAdapt: true,

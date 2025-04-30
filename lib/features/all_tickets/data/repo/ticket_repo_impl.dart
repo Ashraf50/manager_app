@@ -36,14 +36,14 @@ class TicketRepoImpl implements TicketRepo {
   Future<Either<Failure, List<TicketModel>>> sortTicket({
     required String from,
     required String to,
-    required int serviceId,
+    required int ticketianId,
   }) async {
     try {
       final token = await getToken();
       final queryParams = {
         'from': from,
         'to': to,
-        'service_id': serviceId.toString(),
+        'technician_id': ticketianId.toString(),
       };
       var response = await apiHelper.get(
         '${AppStrings.baseUrl}/api/managers/tickets',

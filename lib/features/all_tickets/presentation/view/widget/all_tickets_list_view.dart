@@ -47,13 +47,15 @@ class _AllTicketsListViewState extends State<AllTicketsListView> {
   Widget build(BuildContext context) {
     return Material(
       elevation: 3,
-      borderRadius: BorderRadius.circular(13),
+      borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(13), topRight: Radius.circular(13)),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 13),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(13),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(13), topRight: Radius.circular(13)),
         ),
         child: BlocBuilder<TicketCubit, TicketState>(
           builder: (context, state) {

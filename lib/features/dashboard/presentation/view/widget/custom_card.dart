@@ -27,6 +27,7 @@ class CustomCard extends StatelessWidget {
       constraints: BoxConstraints(
         maxWidth: 200.w,
         minWidth: 150.w,
+        minHeight: 180.h,
       ),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
@@ -43,6 +44,7 @@ class CustomCard extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             width: 70.w,
@@ -75,9 +77,13 @@ class CustomCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                title,
-                style: AppStyles.textStyle16Black,
+              Flexible(
+                child: Text(
+                  title,
+                  style: AppStyles.textStyle16Black,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
               SizedBox(width: 8.w),
               SvgPicture.asset(
@@ -87,7 +93,6 @@ class CustomCard extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(height: 8.h),
           Text(
             value,
             style: AppStyles.textStyle18bold,

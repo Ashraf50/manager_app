@@ -12,7 +12,7 @@ class UserInfoListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserDataCubit, UserDataState>(
       builder: (context, state) {
-        if (state is UserDataSuccess) {
+        if (state is GetUserDataSuccess) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             child: Row(
@@ -46,8 +46,20 @@ class UserInfoListTile extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(state.userData.data!.name ?? "null"),
-                        Text(state.userData.data!.email ?? "null"),
+                        SizedBox(
+                            width: MediaQuery.sizeOf(context).width * .3,
+                            child: Text(
+                              state.userData.data!.name ?? "null",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            )),
+                        SizedBox(
+                            width: MediaQuery.sizeOf(context).width * .3,
+                            child: Text(
+                              state.userData.data!.email ?? "null",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            )),
                       ],
                     ),
                   ],
@@ -64,9 +76,9 @@ class UserInfoListTile extends StatelessWidget {
               ],
             ),
           );
-        } else if (state is UserDataLoading) {
+        } else if (state is GetUserDataLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is UserDataFailure) {
+        } else if (state is GetUserDataFailure) {
           return Center(child: Text(state.errMessage));
         } else {
           return const SizedBox();

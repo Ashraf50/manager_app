@@ -28,19 +28,36 @@ class TicketianCard extends StatelessWidget {
                         Icons.person,
                         color: Colors.grey,
                       ),
+                      const SizedBox(
+                        width: 5,
+                      ),
                       Text(
                         ticketian.user!.name!,
-                        style: AppStyles.textStyle16,
+                        style: AppStyles.textStyle18black,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.email,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width * .6,
+                        child: Text(
+                          ticketian.user!.email!,
+                          style: AppStyles.textStyle18black,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
                     ],
                   ),
                 ],
-              ),
-              Expanded(
-                child: Text(
-                  ticketian.user!.email!,
-                  style: AppStyles.textStyle18black,
-                ),
               ),
               PopupMenuButton(
                 color: Colors.white,
@@ -72,11 +89,11 @@ class TicketianCard extends StatelessWidget {
   }
 
   void _showEditDialog(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final phoneController = TextEditingController();
-    final passwordController = TextEditingController();
-    final confirmPassController = TextEditingController();
+    final nameController = TextEditingController(text: ticketian.user!.name!);
+    final emailController = TextEditingController(text: ticketian.user!.email!);
+    final phoneController = TextEditingController(text: ticketian.user!.phone!);
+    final passwordController = TextEditingController(text: "***********");
+    final confirmPassController = TextEditingController(text: "**********");
     SmartDialog.show(
       builder: (_) => AlertDialog(
         title: const Text('Edit Ticketian'),

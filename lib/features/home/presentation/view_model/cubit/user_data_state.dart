@@ -4,14 +4,26 @@ sealed class UserDataState {}
 
 final class UserDataInitial extends UserDataState {}
 
-final class UserDataLoading extends UserDataState {}
+final class GetUserDataLoading extends UserDataState {}
 
-final class UserDataSuccess extends UserDataState {
+final class GetUserDataSuccess extends UserDataState {
   final UserModel userData;
-  UserDataSuccess({required this.userData});
+  GetUserDataSuccess({required this.userData});
 }
 
-final class UserDataFailure extends UserDataState {
+final class GetUserDataFailure extends UserDataState {
   final String errMessage;
-  UserDataFailure({required this.errMessage});
+  GetUserDataFailure({required this.errMessage});
+}
+
+final class UpdateUserDataLoading extends UserDataState {}
+
+final class UpdateUserDataSuccess extends UserDataState {
+  final UserModel userData;
+  UpdateUserDataSuccess({required this.userData});
+}
+
+final class UpdateUserDataFailure extends UserDataState {
+  final String errMessage;
+  UpdateUserDataFailure({required this.errMessage});
 }

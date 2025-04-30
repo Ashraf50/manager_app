@@ -8,6 +8,7 @@ import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/core/widget/custom_button.dart';
 import 'package:manager_app/core/widget/custom_toast.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
+import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/create_ticketian_cubit.dart';
 import '../../../../../../../core/widget/custom_text_field.dart';
 import '../../../../../core/constant/app_styles.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -44,21 +45,22 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddTicketianCubit, AddTicketianState>(
+    return BlocListener<CreateTicketianCubit, CreateTicketianState>(
       listener: (context, state) {
-        if (state is FetchAllTicketianLoading) {
+        if (state is CreateTicketianLoading) {
           SmartDialog.showLoading();
-        } else if (state is FetchAllTicketianFailure) {
+        } else if (state is CreateTicketianFailure) {
           SmartDialog.dismiss();
           CustomToast.show(
             message: state.errMessage,
             backgroundColor: Colors.red,
           );
-        } else {
+        } else if (state is CreateTicketianSuccess) {
           SmartDialog.dismiss();
           context.pop(context);
+          context.read<AddTicketianCubit>().fetchTicketian();
           CustomToast.show(
-            message: "Manager Created Successfully",
+            message: "Ticketian Created Successfully",
             alignment: Alignment.topCenter,
             backgroundColor: AppColors.toastColor,
           );
@@ -131,7 +133,7 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
                   controller: passwordController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    if (value!.length < 6) {
+                    if (value!.length < 8) {
                       return "your password is too short";
                     } else {
                       return null;
@@ -167,7 +169,7 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
                   title: "Submit",
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
-                      final cubit = context.read<AddTicketianCubit>();
+                      final cubit = context.read<CreateTicketianCubit>();
                       await cubit.createTicketian(
                         name: nameController.text,
                         email: emailController.text,

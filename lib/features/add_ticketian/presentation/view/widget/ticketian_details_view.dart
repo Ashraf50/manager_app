@@ -56,11 +56,11 @@ class TicketianDetailsView extends StatelessWidget {
               height: 10,
             ),
             CustomWidget(
-              title: 'Email',
+              title: 'Email: ',
               subTitle: ticketian.user!.email!,
             ),
             CustomWidget(
-              title: 'Phone',
+              title: 'Phone: ',
               subTitle: ticketian.user!.phone!,
             ),
           ],
