@@ -48,7 +48,7 @@ class TicketianDetailsView extends StatelessWidget {
             ),
             Center(
               child: Text(
-                ticketian.user!.name!,
+                ticketian.user?.name ?? "N/A",
                 style: AppStyles.textStyle18black,
               ),
             ),
@@ -57,11 +57,11 @@ class TicketianDetailsView extends StatelessWidget {
             ),
             CustomWidget(
               title: 'Email: ',
-              subTitle: ticketian.user!.email!,
+              subTitle: ticketian.user?.email ?? "N/A",
             ),
             CustomWidget(
               title: 'Phone: ',
-              subTitle: ticketian.user!.phone!,
+              subTitle: ticketian.user?.phone ?? "N/A",
             ),
           ],
         ),

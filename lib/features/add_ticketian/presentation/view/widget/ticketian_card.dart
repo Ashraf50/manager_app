@@ -91,7 +91,7 @@ class TicketianCard extends StatelessWidget {
   void _showEditDialog(BuildContext context) {
     final nameController = TextEditingController(text: ticketian.user!.name!);
     final emailController = TextEditingController(text: ticketian.user!.email!);
-    final phoneController = TextEditingController(text: ticketian.user!.phone!);
+    final phoneController = TextEditingController(text: ticketian.user?.phone??"N/A");
     final passwordController = TextEditingController(text: "***********");
     final confirmPassController = TextEditingController(text: "**********");
     SmartDialog.show(
