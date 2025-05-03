@@ -3,13 +3,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:manager_app/core/constant/app_colors.dart';
 import 'package:manager_app/core/constant/app_images.dart';
+import 'package:manager_app/core/helper/firebase_notification_helper.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/dashboard/presentation/view/widget/graph.dart';
 import '../../../../all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
 import 'custom_card.dart';
 
-class DashboardViewBody extends StatelessWidget {
+class DashboardViewBody extends StatefulWidget {
   const DashboardViewBody({super.key});
+
+  @override
+  State<DashboardViewBody> createState() => _DashboardViewBodyState();
+}
+
+class _DashboardViewBodyState extends State<DashboardViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseNotificationsHelper(context).init();
+  }
 
   @override
   Widget build(BuildContext context) {

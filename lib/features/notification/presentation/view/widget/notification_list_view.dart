@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:manager_app/features/notification/presentation/view/widget/notification_card.dart';
 import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
+import '../../view_model/cubit/read_notification_cubit.dart';
 
 class AllNotificationsListView extends StatefulWidget {
   const AllNotificationsListView({super.key});
@@ -51,16 +53,22 @@ class _AllNotificationsListViewState extends State<AllNotificationsListView> {
             controller: _scrollController,
             itemCount: state.notifications.length,
             itemBuilder: (context, index) {
+              var notifications = state.notifications;
               return InkWell(
                 onTap: () {
-                  // context.push(
-                  //   "/ticket_details",
-                  //   extra: state.notifications[index],
-                  // );
+                  context.push(
+                    "/notification_details",
+                    extra: notifications[index],
+                  );
+                  if (notifications[index].seen == false) {
+                    context
+                        .read<ReadNotificationCubit>()
+                        .readNotification(notifications[index].id!);
+                  }
                 },
                 child: NotificationCard(
-                  notification: state.notifications[index],
-                  notificationColor: state.notifications[index].seen!
+                  notification: notifications[index],
+                  notificationColor: notifications[index].seen!
                       ? Colors.white
                       : const Color.fromARGB(99, 210, 207, 207),
                 ),

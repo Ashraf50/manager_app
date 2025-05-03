@@ -44,6 +44,8 @@ class NotificationCard extends StatelessWidget {
                         notification.body!,
                         style: AppStyles.textStyle16,
                         softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                     Text(

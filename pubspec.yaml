@@ -50,6 +50,9 @@ dependencies:
   image_picker: ^1.1.2
   intl: ^0.20.2
   photo_view: ^0.15.0
+  firebase_messaging: ^15.2.5
+  firebase_core: ^3.13.0
+  overlay_support: ^2.1.0
 
 dev_dependencies:
   flutter_test:
