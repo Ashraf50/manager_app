@@ -73,7 +73,10 @@ class _AllTicketsListViewState extends State<AllTicketsListView> {
                       );
                     },
                     child: TicketCard(
-                      ticket: tickets,
+                      serviceName: tickets.service?.name ?? '',
+                      userName: tickets.user?.name ?? '',
+                      status: tickets.status!,
+                      id: tickets.id!,
                     ),
                   );
                 },

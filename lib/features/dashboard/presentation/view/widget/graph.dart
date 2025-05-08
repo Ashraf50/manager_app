@@ -1,112 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../../../data/model/statistics/annual_tickets_average.dart';
 
 class ChartsDashboard extends StatelessWidget {
-  const ChartsDashboard({super.key});
+  final List<AnnualTicketsAverage> annualTickets;
+  const ChartsDashboard({super.key, required this.annualTickets});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildDailyResponseChart(),
-        const SizedBox(height: 20),
         _buildAnnualTicketsChart(),
       ],
     );
   }
 
-  Widget _buildDailyResponseChart() {
-    return Container(
-      height: 250,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Daily Respond',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: BarChart(
-              BarChartData(
-                alignment: BarChartAlignment.spaceEvenly,
-                maxY: 100,
-                barTouchData: BarTouchData(enabled: false),
-                titlesData: FlTitlesData(
-                  show: true,
-                  rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                  leftTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false)),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        const days = [
-                          'Sat',
-                          'Sun',
-                          'Mon',
-                          'Tue',
-                          'Wed',
-                          'Thu',
-                          'Fri'
-                        ];
-                        if (value >= 0 && value < days.length) {
-                          return Text(
-                            days[value.toInt()],
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              fontSize: 12,
-                            ),
-                          );
-                        }
-                        return const Text('');
-                      },
-                    ),
-                  ),
-                ),
-                borderData: FlBorderData(show: false),
-                gridData: const FlGridData(show: false),
-                barGroups: [
-                  _createBarData(0, 30),
-                  _createBarData(1, 45),
-                  _createBarData(2, 60),
-                  _createBarData(3, 85),
-                  _createBarData(4, 65),
-                  _createBarData(5, 40),
-                  _createBarData(6, 20),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildAnnualTicketsChart() {
+    final List<FlSpot> spots = [];
+    final List<String> years = [];
+    for (int i = 0; i < annualTickets.length; i++) {
+      final year = annualTickets[i].year ?? 0;
+      final count = annualTickets[i].count ?? 0;
+      spots.add(FlSpot(i.toDouble(), count.toDouble()));
+      years.add(year.toString());
+    }
+    double maxY = annualTickets
+        .map((e) => e.count ?? 0)
+        .reduce((a, b) => a > b ? a : b)
+        .toDouble();
+    maxY = (maxY < 1) ? 1 : maxY + 1;
     return Container(
       height: 250,
+      margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
+        border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -129,8 +58,15 @@ class ChartsDashboard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(Icons.remove_red_eye, size: 20, color: Colors.grey[400]),
+              Icon(
+                Icons.remove_red_eye,
+                size: 20,
+                color: Colors.grey[400],
+              ),
             ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
           Expanded(
             child: LineChart(
@@ -144,15 +80,13 @@ class ChartsDashboard extends StatelessWidget {
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        return Text(
-                          '${value.toInt()}K',
-                          style: TextStyle(
-                            color: Colors.grey[400],
-                            fontSize: 12,
-                          ),
-                        );
-                      },
+                      getTitlesWidget: (value, meta) => Text(
+                        '${value.toInt()}',
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontSize: 12,
+                        ),
+                      ),
                       interval: 1,
                     ),
                   ),
@@ -160,10 +94,10 @@ class ChartsDashboard extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       getTitlesWidget: (value, meta) {
-                        const years = ['2021', '2022', '2023', '2024', '2025'];
-                        if (value >= 0 && value < years.length) {
+                        int index = value.toInt();
+                        if (index >= 0 && index < years.length) {
                           return Text(
-                            years[value.toInt()],
+                            years[index],
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: 12,
@@ -179,13 +113,7 @@ class ChartsDashboard extends StatelessWidget {
                 borderData: FlBorderData(show: false),
                 lineBarsData: [
                   LineChartBarData(
-                    spots: const [
-                      FlSpot(0, 2.5),
-                      FlSpot(1, 1.5),
-                      FlSpot(2, 2.0),
-                      FlSpot(3, 4.0),
-                      FlSpot(4, 3.2),
-                    ],
+                    spots: spots,
                     isCurved: true,
                     color: const Color(0xFF4CD964),
                     barWidth: 2,
@@ -197,30 +125,13 @@ class ChartsDashboard extends StatelessWidget {
                     ),
                   ),
                 ],
-                minY: 1,
-                maxY: 4,
+                minY: 0,
+                maxY: maxY,
               ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  BarChartGroupData _createBarData(int x, double y) {
-    return BarChartGroupData(
-      x: x,
-      barRods: [
-        BarChartRodData(
-          toY: y,
-          color: const Color(0xFF3B5998),
-          width: 25,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(6),
-            bottom: Radius.circular(6),
-          ),
-        ),
-      ],
     );
   }
 }

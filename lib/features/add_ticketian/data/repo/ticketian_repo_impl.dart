@@ -25,7 +25,7 @@ class TicketianRepoImpl implements TicketianRepo {
         {
           "name": name,
           "email": email,
-          'phone':phone,
+          'phone': phone,
           "password": password,
           "password_confirmation": confirmPass,
         },

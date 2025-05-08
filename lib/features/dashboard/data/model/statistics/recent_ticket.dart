@@ -1,20 +1,20 @@
+import 'package:manager_app/features/dashboard/data/model/statistics/technician.dart';
 import 'manager.dart';
 import 'service.dart';
-import 'technician.dart';
 import 'user.dart';
 
-class TicketModel {
+class RecentTicket {
   int? id;
   String? title;
   int? status;
-  String? createdAt;
+  DateTime? createdAt;
   String? description;
   Service? service;
   User? user;
   Manager? manager;
   Technician? technician;
-  
-  TicketModel({
+
+  RecentTicket({
     this.id,
     this.title,
     this.status,
@@ -26,11 +26,13 @@ class TicketModel {
     this.technician,
   });
 
-  factory TicketModel.fromJson(Map<String, dynamic> json) => TicketModel(
+  factory RecentTicket.fromJson(Map<String, dynamic> json) => RecentTicket(
         id: json['id'] as int?,
         title: json['title'] as String?,
         status: json['status'] as int?,
-        createdAt: json['created_at'] as String,
+        createdAt: json['created_at'] == null
+            ? null
+            : DateTime.parse(json['created_at'] as String),
         description: json['description'] as String?,
         service: json['service'] == null
             ? null
@@ -50,11 +52,11 @@ class TicketModel {
         'id': id,
         'title': title,
         'status': status,
-        'created_at': createdAt,
+        'created_at': createdAt?.toIso8601String(),
         'description': description,
         'service': service?.toJson(),
         'user': user?.toJson(),
         'manager': manager?.toJson(),
-        'technician': technician?.toJson(),
+        'technician': technician,
       };
 }

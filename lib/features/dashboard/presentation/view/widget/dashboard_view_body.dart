@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/constant/app_colors.dart';
 import 'package:manager_app/core/constant/app_images.dart';
+import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/helper/firebase_notification_helper.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/dashboard/presentation/view/widget/graph.dart';
-import '../../../../all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
+import 'package:manager_app/features/dashboard/presentation/view_model/cubit/statistics_cubit.dart';
+import '../../../../all_tickets/presentation/view/widget/ticket_card.dart';
 import 'custom_card.dart';
 
 class DashboardViewBody extends StatefulWidget {
@@ -27,25 +30,30 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       body: SingleChildScrollView(
-        child: BlocBuilder<TicketCubit, TicketState>(
+        child: BlocBuilder<StatisticsCubit, StatisticsState>(
           builder: (context, state) {
-            if (state is FetchTicketLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is FetchTicketFailure) {
-              return Center(child: Text(state.errMessage));
-            } else if (state is FetchTicketSuccess) {
-              final tickets = state.tickets;
-              final totalTickets = tickets.length;
-              final closedTickets = tickets.where((t) => t.status == 3).length;
-              final openTickets = tickets.where((t) => t.status == 1).length;
+            if (state is StatisticsLoading) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 80),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            } else if (state is StatisticsError) {
+              return Center(child: Text(state.message));
+            } else if (state is StatisticsLoaded) {
+              final totalTickets = state.statistics.data!.allTickets!;
+              final closedTickets = state.statistics.data!.closedTickets!;
+              final inProgressTickets = state.statistics.data!.closedTickets!;
+              final openTickets = state.statistics.data!.openedTickets!;
               final closedPercentage = totalTickets > 0
                   ? ((closedTickets / totalTickets) * 100).round()
+                  : 0;
+              final inProgressPercentage = totalTickets > 0
+                  ? ((inProgressTickets / totalTickets) * 100).round()
                   : 0;
               final openPercentage = totalTickets > 0
                   ? ((openTickets / totalTickets) * 100).round()
                   : 0;
-              const userCount = 6; // From your screenshot
-              const userPercentage = 100; // From your screenshot
+              var techniciansCount = state.statistics.data!.techniciansCount!;
               return Column(
                 children: [
                   LayoutBuilder(
@@ -73,6 +81,13 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             circleColor: AppColors.darkBlue,
                           ),
                           CustomCard(
+                            title: "InProgress Tickets",
+                            value: inProgressTickets.toString(),
+                            percentage: "$inProgressPercentage%",
+                            iconAsset: Assets.ticket,
+                            circleColor: AppColors.darkBlue,
+                          ),
+                          CustomCard(
                             title: "Open Tickets",
                             value: openTickets.toString(),
                             percentage: "$openPercentage%",
@@ -80,9 +95,9 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             circleColor: AppColors.darkBlue,
                           ),
                           CustomCard(
-                            title: "Users",
-                            value: userCount.toString(),
-                            percentage: "$userPercentage%",
+                            title: "Technicians",
+                            value: techniciansCount.toString(),
+                            percentage: "100%",
                             iconAsset: Assets.users,
                             circleColor: AppColors.darkBlue,
                           ),
@@ -91,7 +106,65 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                     },
                   ),
                   SizedBox(height: 24.h),
-                  const ChartsDashboard(),
+                  ChartsDashboard(
+                    annualTickets: state.statistics.data!.annualTicketsAverage!,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Recent Tickets",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        if (state.statistics.data!.recentTickets == null ||
+                            state.statistics.data!.recentTickets!.isEmpty)
+                          Center(
+                            child: Text(
+                              'No tickets',
+                              style: AppStyles.textStyle16,
+                            ),
+                          )
+                        else
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                state.statistics.data!.recentTickets!.length,
+                            itemBuilder: (context, index) {
+                              final tickets =
+                                  state.statistics.data!.recentTickets![index];
+                              return InkWell(
+                                onTap: () {
+                                  context.push(
+                                    "/dashboard_ticket_details",
+                                    extra: tickets,
+                                  );
+                                },
+                                child: TicketCard(
+                                  serviceName: tickets.service?.name ?? '',
+                                  userName: tickets.user?.name ?? '',
+                                  status: tickets.status!,
+                                  id: tickets.id!,
+                                ),
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  )
                 ],
               );
             }

@@ -3,15 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
-import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/widget/status_button.dart';
 import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
 
 class TicketCard extends StatelessWidget {
-  final TicketModel ticket;
+  final String serviceName;
+  final int id;
+  final String userName;
+  final int status;
   const TicketCard({
     super.key,
-    required this.ticket,
+    required this.id,
+    required this.serviceName,
+    required this.userName,
+    required this.status,
   });
 
   @override
@@ -29,7 +34,7 @@ class TicketCard extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Text(
-                      ticket.service!.name!,
+                      serviceName,
                       style: AppStyles.textStyle18black,
                       softWrap: true,
                     ),
@@ -41,7 +46,7 @@ class TicketCard extends StatelessWidget {
                         color: Colors.grey,
                       ),
                       Text(
-                        ticket.user!.name!,
+                        userName,
                         style: AppStyles.textStyle16,
                       ),
                     ],
@@ -49,7 +54,7 @@ class TicketCard extends StatelessWidget {
                 ],
               ),
               StatusButton(
-                status: ticket.status!,
+                status: status,
               ),
               PopupMenuButton(
                 color: Colors.white,
@@ -68,7 +73,7 @@ class TicketCard extends StatelessWidget {
                   if (value == 'assign') {
                     context.push(
                       '/assign_ticket',
-                      extra: ticket.id!,
+                      extra: id,
                     );
                   } else if (value == 'finish') {
                     _showFinishDialog(context);
@@ -95,7 +100,7 @@ class TicketCard extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              context.read<TicketCubit>().finishTicket(ticketId: ticket.id!);
+              context.read<TicketCubit>().finishTicket(ticketId: id);
               SmartDialog.dismiss();
             },
             child: const Text('Finish', style: TextStyle(color: Colors.red)),

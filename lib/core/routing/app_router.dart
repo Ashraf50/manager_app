@@ -5,12 +5,14 @@ import 'package:manager_app/features/add_ticketian/presentation/view/widget/tick
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/widget/assign_ticket_view.dart';
 import 'package:manager_app/features/chat/presentation/view/widget/chat_details_view.dart';
+import 'package:manager_app/features/dashboard/data/model/statistics/recent_ticket.dart';
 import 'package:manager_app/features/home/presentation/view/widget/edit_profile_view.dart';
 import 'package:manager_app/features/notification/data/model/notification_model/notification_model.dart';
 import 'package:manager_app/features/notification/presentation/view/notification_view.dart';
 import 'package:manager_app/features/notification/presentation/view/widget/notification_details_view_body.dart';
 import '../../features/Auth/presentation/view/forget_password_view.dart';
 import '../../features/Auth/presentation/view/sign_in_view.dart';
+import '../../features/dashboard/presentation/view/widget/ticket_details.dart';
 import '../../features/home/data/model/user_model/user_model.dart';
 import '../widget/photo_view.dart';
 import '../../features/home/presentation/view/manager_home_view.dart';
@@ -52,6 +54,12 @@ class AppRouter {
           builder: (context, state) {
             var ticketian = state.extra as TicketianModel;
             return TicketianDetailsView(ticketian: ticketian);
+          }),
+      GoRoute(
+          path: '/dashboard_ticket_details',
+          builder: (context, state) {
+            var ticket = state.extra as RecentTicket;
+            return DashboardTicketDetails(ticket: ticket);
           }),
       GoRoute(
           path: '/photo_view',

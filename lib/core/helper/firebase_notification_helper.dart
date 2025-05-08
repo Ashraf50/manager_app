@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
+import 'package:manager_app/core/helper/api_helper.dart';
 import 'package:manager_app/features/dashboard/data/repo/dashboard_repo_impl.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -35,7 +36,7 @@ class FirebaseNotificationsHelper {
       String? token = await _messaging.getToken();
       if (token != null) {
         print("📱 FCM Token: $token");
-        final repo = DashboardRepoImpl();
+        final repo = DashboardRepoImpl(ApiHelper());
         await repo.sendFcmToken(token);
       }
     } catch (e) {
