@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manager_app/core/constant/app_colors.dart';
+import 'package:manager_app/generated/l10n.dart';
 
 class StatusButton extends StatelessWidget {
   final int status;
@@ -15,27 +16,27 @@ class StatusButton extends StatelessWidget {
     Color textColor;
     switch (status) {
       case 0:
-        title = "Pending";
+        title = S.of(context).pending;
         color = AppColors.pendingColors;
         textColor = AppColors.darkGrey;
         break;
       case 1:
-        title = "In Progress";
+        title = S.of(context).inProgress;
         color = AppColors.processingColors;
         textColor = Colors.orange;
         break;
       case 2:
-        title = "Resolved";
+        title = S.of(context).resolved;
         color = AppColors.completedColors;
         textColor = Colors.green;
         break;
       case 3:
-        title = "Closed";
+        title = S.of(context).closed;
         color = AppColors.closeColors!;
         textColor = Colors.white;
         break;
       default:
-        title = "Unknown";
+        title = S.of(context).unKnown;
         color = AppColors.white;
         textColor = Colors.black;
         break;

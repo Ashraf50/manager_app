@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view/widget/all_ticketian_list_view.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../../../core/constant/app_styles.dart';
 import '../../../../../../../core/widget/custom_search.dart';
 import '../../../../all_tickets/presentation/view/widget/add_button.dart';
@@ -29,7 +30,7 @@ class AddTicketianViewBody extends StatelessWidget {
               children: [
                 CustomSearch(
                   controller: searchController,
-                  hintText: "search",
+                  hintText: S.of(context).search,
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   onChange: (value) {
                     if (value.isEmpty) {
@@ -58,7 +59,7 @@ class AddTicketianViewBody extends StatelessWidget {
                       ),
                     ),
                     AddButton(
-                      title: "Create New",
+                      title: S.of(context).createNew,
                       onTap: () {
                         context.push("/add_new_ticketian");
                       },

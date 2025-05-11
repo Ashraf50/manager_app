@@ -10,6 +10,7 @@ import 'package:manager_app/core/widget/custom_button.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/core/widget/custom_text_field.dart';
 import 'package:manager_app/features/Auth/presentation/view_model/bloc/auth_bloc.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/widget/custom_toast.dart';
 
 class ForgetPasswordViewBody extends StatefulWidget {
@@ -70,37 +71,37 @@ class _ForgetPasswordViewBodyState extends State<ForgetPasswordViewBody> {
                 children: [
                   Center(
                     child: Text(
-                      "Reset your password",
+                      S.of(context).reset_pass,
                       style: AppStyles.textStyle20blackBold.copyWith(height: 2),
                     ),
                   ),
                   Center(
                     child: Text(
-                      "We well send an email with \n instructions to reset your password ",
+                      "${S.of(context).reset_desc1}\n${S.of(context).reset_desc2}",
                       style: AppStyles.textStyle18black,
                       textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: 30.h),
                   Text(
-                    "Email",
+                    S.of(context).Email,
                     style: AppStyles.textStyle18black,
                   ),
                   CustomTextfield(
-                    hintText: "Enter your email",
+                    hintText: S.of(context).email,
                     obscureText: false,
                     controller: emailController,
                     prefixIcon: const Icon(Icons.email),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       return value != null && !EmailValidator.validate(value)
-                          ? " Enter a valid email"
+                          ? S.of(context).enter_valid_email
                           : null;
                     },
                   ),
                   SizedBox(height: 15.h),
                   CustomButton(
-                    title: "Forget password",
+                    title: S.of(context).forget_password,
                     color: emailController.text.isEmpty
                         ? AppColors.inActiveBlue
                         : AppColors.activeBlue,
@@ -111,7 +112,7 @@ class _ForgetPasswordViewBodyState extends State<ForgetPasswordViewBody> {
                         ));
                       } else {
                         CustomToast.show(
-                          message: "check your email",
+                          message: S.of(context).check_email_only,
                         );
                       }
                     },

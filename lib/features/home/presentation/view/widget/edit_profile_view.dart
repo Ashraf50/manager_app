@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/home/presentation/view/widget/profile_photo.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/constant/app_colors.dart';
 import '../../../../../core/constant/app_styles.dart';
 import '../../../../../core/constant/func/get_token.dart';
@@ -36,24 +37,35 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.user.data!.name!);
-    emailController = TextEditingController(text: widget.user.data!.email!);
-    phoneController = TextEditingController(text: widget.user.data!.phone!);
+    nameController = TextEditingController();
+    emailController = TextEditingController();
+    phoneController = TextEditingController();
+
     nameController.addListener(() {
       setState(() {});
     });
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    nameController.text = widget.user.data!.name ?? S.of(context).null_value;
+    emailController.text = widget.user.data!.email ?? S.of(context).null_value;
+    phoneController.text = widget.user.data!.phone ?? S.of(context).null_value;
+  }
+
+  @override
   void dispose() {
     nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: "Edit Profile"),
+      appBar: CustomAppBar(title: S.of(context).editProfile),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: BlocConsumer<UserDataCubit, UserDataState>(
@@ -65,7 +77,7 @@ class _EditProfileViewState extends State<EditProfileView> {
               context.read<UserDataCubit>().fetchUserData(token!);
               context.go('/manager_home');
               CustomToast.show(
-                message: "Profile updated successfully",
+                message: S.of(context).Profile_updated,
                 alignment: Alignment.topCenter,
                 backgroundColor: AppColors.toastColor,
               );
@@ -93,58 +105,61 @@ class _EditProfileViewState extends State<EditProfileView> {
                     },
                   ),
                   Text(
-                    "Name",
+                    S.of(context).name,
                     style: AppStyles.textStyle18bold,
                   ),
                   CustomTextfield(
-                    hintText: widget.user.data!.name!,
+                    hintText:
+                        widget.user.data!.name ?? S.of(context).null_value,
                     controller: nameController,
                     prefixIcon: const Icon(Icons.person),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value == '') {
-                        return "empty field";
+                        return S.of(context).empty_field;
                       } else {
                         return null;
                       }
                     },
                   ),
                   Text(
-                    "Email",
+                    S.of(context).Email,
                     style: AppStyles.textStyle18bold,
                   ),
                   CustomTextfield(
-                    hintText: widget.user.data!.email!,
+                    hintText:
+                        widget.user.data!.email ?? S.of(context).null_value,
                     obscureText: false,
                     prefixIcon: const Icon(Icons.email),
                     controller: emailController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       return value != null && !EmailValidator.validate(value)
-                          ? " Enter a valid email"
+                          ? S.of(context).enter_valid_email
                           : null;
                     },
                   ),
                   Text(
-                    "Phone",
+                    S.of(context).phone,
                     style: AppStyles.textStyle18bold,
                   ),
                   CustomTextfield(
-                    hintText: widget.user.data!.phone!,
+                    hintText:
+                        widget.user.data!.phone ?? S.of(context).null_value,
                     obscureText: false,
                     prefixIcon: const Icon(Icons.phone),
                     controller: phoneController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value!.length != 11) {
-                        return "Enter a valid phone num";
+                        return S.of(context).enter_valid_phone;
                       } else {
                         return null;
                       }
                     },
                   ),
                   CustomButton(
-                    title: "Submit",
+                    title: S.of(context).submit,
                     color: nameController.text.isEmpty
                         ? AppColors.inActiveBlue
                         : AppColors.activeBlue,
@@ -152,7 +167,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                       if (formKey.currentState!.validate()) {
                         if (avatar == null) {
                           CustomToast.show(
-                            message: "Please select a profile picture",
+                            message:
+                                S.of(context).Please_select_profile_picture,
                             backgroundColor: Colors.red,
                           );
                           return;
@@ -165,7 +181,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                             );
                       } else {
                         CustomToast.show(
-                          message: "Check your data",
+                          message: S.of(context).check_data,
                         );
                       }
                     },

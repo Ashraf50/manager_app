@@ -8,6 +8,7 @@ import 'package:manager_app/features/Auth/data/repo/auth_repo_impl.dart';
 import 'package:manager_app/features/home/presentation/view/widget/active_and_inactive_item.dart';
 import 'package:manager_app/features/home/presentation/view/widget/manager_drawer_item_list_view.dart';
 import 'package:manager_app/features/home/presentation/view/widget/user_info.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../data/model/drawer_model.dart';
 
 class ManagerDrawer extends StatelessWidget {
@@ -53,9 +54,9 @@ class ManagerDrawer extends StatelessWidget {
                     AuthRepo authRepo = AuthRepoImpl(ApiHelper());
                     authRepo.logout();
                   },
-                  child: const InActiveDrawerItem(
+                  child: InActiveDrawerItem(
                     drawerItemModel: DrawerItemModel(
-                      title: 'Logout account',
+                      title: S.of(context).logoutAccount,
                       image: Assets.logout,
                     ),
                   ),

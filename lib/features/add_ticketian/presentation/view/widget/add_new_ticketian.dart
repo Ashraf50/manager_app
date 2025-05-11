@@ -9,6 +9,7 @@ import 'package:manager_app/core/widget/custom_button.dart';
 import 'package:manager_app/core/widget/custom_toast.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/create_ticketian_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../../../core/widget/custom_text_field.dart';
 import '../../../../../core/constant/app_styles.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -60,14 +61,14 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
           context.pop(context);
           context.read<AddTicketianCubit>().fetchTicketian();
           CustomToast.show(
-            message: "Ticketian Created Successfully",
+            message: S.of(context).ticketian_created_successfully,
             alignment: Alignment.topCenter,
             backgroundColor: AppColors.toastColor,
           );
         }
       },
       child: CustomScaffold(
-        appBar: const CustomAppBar(title: "Create New"),
+        appBar: CustomAppBar(title: S.of(context).createNew),
         body: Form(
           key: formKey,
           child: Padding(
@@ -78,41 +79,41 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
                   height: 20,
                 ),
                 Text(
-                  "Name",
+                  S.of(context).name,
                   style: AppStyles.textStyle18bold,
                 ),
                 CustomTextfield(
-                  hintText: "Name",
+                  hintText: S.of(context).name,
                   controller: nameController,
                 ),
                 Text(
-                  "Email",
+                  S.of(context).Email,
                   style: AppStyles.textStyle18bold,
                 ),
                 CustomTextfield(
-                  hintText: "Email",
+                  hintText: S.of(context).email,
                   controller: emailController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     return value != null && !EmailValidator.validate(value)
-                        ? " Enter a valid email"
+                        ? S.of(context).enter_valid_email
                         : null;
                   },
                 ),
                 Text(
-                  "Phone",
+                  S.of(context).phone,
                   style: AppStyles.textStyle18bold,
                 ),
                 CustomTextfield(
-                  hintText: "Phone",
+                  hintText: S.of(context).phone,
                   controller: phonePassController,
                 ),
                 Text(
-                  "password",
+                  S.of(context).Password,
                   style: AppStyles.textStyle18bold,
                 ),
                 CustomTextfield(
-                  hintText: "password",
+                  hintText: S.of(context).password,
                   obscureText: visibility,
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -134,18 +135,18 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value!.length < 8) {
-                      return "your password is too short";
+                      return S.of(context).pass_short;
                     } else {
                       return null;
                     }
                   },
                 ),
                 Text(
-                  "confirm password",
+                  S.of(context).confirmPassword,
                   style: AppStyles.textStyle18bold,
                 ),
                 CustomTextfield(
-                  hintText: "Confirm password",
+                  hintText: S.of(context).confirmPassword,
                   obscureText: visibility,
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -166,7 +167,7 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
                   controller: confirmPassController,
                 ),
                 CustomButton(
-                  title: "Submit",
+                  title: S.of(context).submit,
                   onTap: () async {
                     if (formKey.currentState!.validate()) {
                       final cubit = context.read<CreateTicketianCubit>();
@@ -178,7 +179,7 @@ class _AddNewTicketianState extends State<AddNewTicketian> {
                         confirmPass: confirmPassController.text,
                       );
                     } else {
-                      CustomToast.show(message: "Check email or password");
+                      CustomToast.show(message: S.of(context).check_email);
                     }
                   },
                   color: nameController.text.isEmpty

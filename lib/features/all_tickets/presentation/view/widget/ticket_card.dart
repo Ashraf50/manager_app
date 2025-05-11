@@ -5,16 +5,17 @@ import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/widget/status_button.dart';
 import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 
 class TicketCard extends StatelessWidget {
-  final String serviceName;
+  final String ticketName;
   final int id;
   final String userName;
   final int status;
   const TicketCard({
     super.key,
     required this.id,
-    required this.serviceName,
+    required this.ticketName,
     required this.userName,
     required this.status,
   });
@@ -34,9 +35,11 @@ class TicketCard extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Text(
-                      serviceName,
+                      ticketName,
                       style: AppStyles.textStyle18black,
                       softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Row(
@@ -60,13 +63,13 @@ class TicketCard extends StatelessWidget {
                 color: Colors.white,
                 icon: const Icon(Icons.more_vert),
                 itemBuilder: (BuildContext context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'assign',
-                    child: Text('Assign'),
+                    child: Text(S.of(context).assign),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'finish',
-                    child: Text('Finish'),
+                    child: Text(S.of(context).finish),
                   ),
                 ],
                 onSelected: (value) {
@@ -91,19 +94,20 @@ class TicketCard extends StatelessWidget {
   void _showFinishDialog(BuildContext context) {
     SmartDialog.show(
       builder: (_) => AlertDialog(
-        title: const Text('Confirm finish'),
-        content: const Text('Are you sure you want to finish this Ticket?'),
+        title: Text(S.of(context).confirm_finish),
+        content: Text(S.of(context).sure_finish_Ticket),
         actions: [
           TextButton(
             onPressed: () => SmartDialog.dismiss(),
-            child: const Text('Cancel'),
+            child: Text(S.of(context).cancel),
           ),
           TextButton(
             onPressed: () {
               context.read<TicketCubit>().finishTicket(ticketId: id);
               SmartDialog.dismiss();
             },
-            child: const Text('Finish', style: TextStyle(color: Colors.red)),
+            child: Text(S.of(context).finish,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),

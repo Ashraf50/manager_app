@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/constant/func/data_format.dart';
 import '../../../data/model/notification_model/notification_model.dart';
 
@@ -28,7 +29,7 @@ class NotificationDetailsViewBody extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${dateTimeFormat(notification.createdAt.toString(), 'h : mm ')} hours ago",
+                  "${dateTimeFormat(notification.createdAt.toString(), 'h : mm ')} ${S.of(context).hour}",
                   style: AppStyles.textStyle16,
                   softWrap: true,
                 ),

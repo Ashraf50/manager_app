@@ -4,6 +4,7 @@ import 'package:manager_app/core/widget/custom_app_bar.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/widget/status_button.dart';
 import 'package:manager_app/features/dashboard/data/model/statistics/recent_ticket.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/constant/func/data_format.dart';
 
 class DashboardTicketDetails extends StatelessWidget {
@@ -13,8 +14,8 @@ class DashboardTicketDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(
-        title: "Ticket Details",
+      appBar: CustomAppBar(
+        title: S.of(context).ticket_details,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -24,26 +25,26 @@ class DashboardTicketDetails extends StatelessWidget {
               height: 10,
             ),
             CustomWidget(
-              title: "User name: ",
+              title: "${S.of(context).user_name}: ",
               subTitle: ticket.user?.name ?? "N/A",
             ),
             CustomWidget(
-              title: "Service name: ",
+              title: "${S.of(context).service_name}: ",
               subTitle: ticket.service?.name ?? "N/A",
             ),
             CustomWidget(
-              title: "Manager name: ",
+              title: "${S.of(context).manager_name}: ",
               subTitle: ticket.manager?.user?.name ?? "N/A",
             ),
             CustomWidget(
-              title: "Ticketian name: ",
+              title: "${S.of(context).ticketian_name}: ",
               subTitle: ticket.technician?.user?.name ?? "N/A",
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
-              "Title:",
+              "${S.of(context).title}: ",
               style: AppStyles.textStyle18bold,
             ),
             SelectableText(
@@ -54,11 +55,11 @@ class DashboardTicketDetails extends StatelessWidget {
               height: 8,
             ),
             Text(
-              "Details:",
+              "${S.of(context).details}: ",
               style: AppStyles.textStyle18bold,
             ),
             SelectableText(
-              ticket.description ?? "No Details Available",
+              ticket.description ?? S.of(context).no_details,
               style: AppStyles.textStyle18black,
             ),
             const SizedBox(
@@ -67,7 +68,7 @@ class DashboardTicketDetails extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Status",
+                  S.of(context).status,
                   style: AppStyles.textStyle18bold,
                 ),
                 const SizedBox(
@@ -82,12 +83,11 @@ class DashboardTicketDetails extends StatelessWidget {
               height: 10,
             ),
             Text(
-              "Created at:",
+              S.of(context).created_at,
               style: AppStyles.textStyle18bold,
             ),
             SelectableText(
-              dateTimeFormat(
-                  ticket.createdAt.toString(), 'd / M / y - h : mm '),
+              dateTimeFormat(ticket.createdAt.toString(), 'd / M / y'),
               style: AppStyles.textStyle18black,
             ),
           ],

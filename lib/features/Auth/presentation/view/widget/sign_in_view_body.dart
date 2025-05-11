@@ -9,7 +9,7 @@ import 'package:manager_app/core/widget/custom_button.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/core/widget/custom_text_field.dart';
 import 'package:manager_app/features/Auth/presentation/view/widget/custom_auth_app_bar.dart';
-
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/constant/app_colors.dart';
 import '../../../../../core/widget/custom_toast.dart';
 import '../../../../home/presentation/view_model/cubit/user_data_cubit.dart';
@@ -70,16 +70,15 @@ class _SignInViewBodyState extends State<SignInViewBody> {
             key: formKey,
             child: ListView(
               children: [
-                const CustomAuthAppBar(
-                  title: 'Welcome Back!',
-                  subTitle:
-                      'To keep connected with us please\nlogin with your personal Info',
+                CustomAuthAppBar(
+                  title: S.of(context).welcome,
+                  subTitle: S.of(context).welcomeDescription,
                 ),
                 SizedBox(
                   height: 15.h,
                 ),
                 Text(
-                  'Sign In',
+                  S.of(context).signIn,
                   style: AppStyles.textStyle20blackBold,
                   textAlign: TextAlign.center,
                 ),
@@ -92,11 +91,11 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Email",
+                        S.of(context).Email,
                         style: AppStyles.textStyle18black,
                       ),
                       CustomTextfield(
-                        hintText: "Enter your email",
+                        hintText: S.of(context).email,
                         obscureText: false,
                         prefixIcon: const Icon(Icons.email),
                         controller: emailController,
@@ -104,16 +103,16 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                         validator: (value) {
                           return value != null &&
                                   !EmailValidator.validate(value)
-                              ? " Enter a valid email"
+                              ? S.of(context).enter_valid_email
                               : null;
                         },
                       ),
                       Text(
-                        "Password",
+                        S.of(context).Password,
                         style: AppStyles.textStyle18black,
                       ),
                       CustomTextfield(
-                        hintText: "Enter your password",
+                        hintText: S.of(context).password,
                         prefixIcon: const Icon(Icons.lock_sharp),
                         obscureText: visibility,
                         suffixIcon: IconButton(
@@ -146,7 +145,7 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                               context.push('/forget_pass');
                             },
                             child: Text(
-                              'forget password!',
+                              S.of(context).forget,
                               style: AppStyles.textStyle18blue,
                             ),
                           )
@@ -154,7 +153,7 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                       ),
                       SizedBox(height: 15.h),
                       CustomButton(
-                        title: "Sign In",
+                        title: S.of(context).signIn,
                         color: emailController.text.isEmpty
                             ? AppColors.inActiveBlue
                             : AppColors.activeBlue,
@@ -166,7 +165,7 @@ class _SignInViewBodyState extends State<SignInViewBody> {
                             ));
                           } else {
                             CustomToast.show(
-                              message: "check the email or password",
+                              message: S.of(context).check_email,
                             );
                           }
                         },

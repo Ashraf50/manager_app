@@ -46,11 +46,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             }
             emit(ForgetFailure(errMessage: errorMessage));
           } else if (result['type'] == 'success') {
-            final user = result['data']['user'];
-            if (user != null && user['type'] != 2) {
-              emit(ForgetFailure(errMessage: 'This account is not a manager.'));
-              return;
-            }
             emit(ForgetSuccess(successMessage: result['message']));
           }
         } catch (e) {

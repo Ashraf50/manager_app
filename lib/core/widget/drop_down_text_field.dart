@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ticketian_model.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../constant/app_colors.dart';
 
 class DropdownTextField extends StatelessWidget {
@@ -25,7 +26,7 @@ class DropdownTextField extends StatelessWidget {
           isExpanded: true,
           value: selectedTicketian,
           dropdownColor: AppColors.white,
-          hint: const Text('Select ticketian'),
+          hint: Text(S.of(context).selectTicketian),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
           items: ticketian.map((ticketian) {
             return DropdownMenuItem<TicketianModel>(

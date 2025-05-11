@@ -9,6 +9,7 @@ import 'package:manager_app/core/helper/firebase_notification_helper.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/dashboard/presentation/view/widget/graph.dart';
 import 'package:manager_app/features/dashboard/presentation/view_model/cubit/statistics_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../all_tickets/presentation/view/widget/ticket_card.dart';
 import 'custom_card.dart';
 
@@ -42,7 +43,8 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
             } else if (state is StatisticsLoaded) {
               final totalTickets = state.statistics.data!.allTickets!;
               final closedTickets = state.statistics.data!.closedTickets!;
-              final inProgressTickets = state.statistics.data!.closedTickets!;
+              final inProgressTickets =
+                  state.statistics.data!.inProcessingTickets!;
               final openTickets = state.statistics.data!.openedTickets!;
               final closedPercentage = totalTickets > 0
                   ? ((closedTickets / totalTickets) * 100).round()
@@ -67,35 +69,35 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                         childAspectRatio: 0.85,
                         children: [
                           CustomCard(
-                            title: "All Tickets",
+                            title: S.of(context).allTickets,
                             value: totalTickets.toString(),
                             percentage: "100%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
                           ),
                           CustomCard(
-                            title: "Closed Tickets",
+                            title: S.of(context).closedTickets,
                             value: closedTickets.toString(),
                             percentage: "$closedPercentage%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
                           ),
                           CustomCard(
-                            title: "InProgress Tickets",
+                            title: S.of(context).ProgressTickets,
                             value: inProgressTickets.toString(),
                             percentage: "$inProgressPercentage%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
                           ),
                           CustomCard(
-                            title: "Open Tickets",
+                            title: S.of(context).openTickets,
                             value: openTickets.toString(),
                             percentage: "$openPercentage%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
                           ),
                           CustomCard(
-                            title: "Technicians",
+                            title: S.of(context).technicians,
                             value: techniciansCount.toString(),
                             percentage: "100%",
                             iconAsset: Assets.users,
@@ -119,9 +121,9 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Recent Tickets",
-                          style: TextStyle(
+                        Text(
+                          S.of(context).recentTickets,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -133,7 +135,7 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             state.statistics.data!.recentTickets!.isEmpty)
                           Center(
                             child: Text(
-                              'No tickets',
+                              S.of(context).no_tickets,
                               style: AppStyles.textStyle16,
                             ),
                           )
@@ -154,8 +156,10 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                                   );
                                 },
                                 child: TicketCard(
-                                  serviceName: tickets.service?.name ?? '',
-                                  userName: tickets.user?.name ?? '',
+                                  ticketName:
+                                      tickets.title ?? S.of(context).null_value,
+                                  userName: tickets.user?.name ??
+                                      S.of(context).null_value,
                                   status: tickets.status!,
                                   id: tickets.id!,
                                 ),

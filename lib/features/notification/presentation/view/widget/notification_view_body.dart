@@ -7,6 +7,7 @@ import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/features/notification/data/repo/notification_repo_impl.dart';
 import 'package:manager_app/features/notification/presentation/view/widget/notification_list_view.dart';
 import 'package:manager_app/features/notification/presentation/view_model/cubit/read_notification_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/widget/custom_toast.dart';
 import '../../view_model/cubit/notification_cubit.dart';
 
@@ -16,7 +17,7 @@ class NotificationViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: "Notification"),
+      appBar: CustomAppBar(title: S.of(context).notification),
       body: BlocProvider(
         create: (context) =>
             ReadNotificationCubit(NotificationRepoImpl(ApiHelper())),
@@ -33,7 +34,7 @@ class NotificationViewBody extends StatelessWidget {
                 state is ReadNotificationSuccess) {
               context.read<NotificationCubit>().fetchNotifications(reset: true);
               CustomToast.show(
-                message: "notification deleted successfully",
+                message: S.of(context).notification_deleted_successfully,
                 backgroundColor: AppColors.toastColor,
               );
             }

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:manager_app/core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,9 +15,11 @@ import 'package:manager_app/features/dashboard/presentation/view_model/cubit/sta
 import 'package:manager_app/features/home/presentation/view_model/cubit/user_data_cubit.dart';
 import 'package:manager_app/features/notification/data/repo/notification_repo_impl.dart';
 import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 import 'core/helper/api_helper.dart';
 import 'features/Auth/presentation/view_model/bloc/auth_bloc.dart';
 import 'features/home/data/repo/user_repo_impl.dart';
+import 'features/settings/presentation/view_model/language_bloc/language_bloc.dart';
 
 class MyApp extends StatelessWidget {
   final AppRouter appRouter;
@@ -58,15 +61,44 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 CreateTicketianCubit(TicketianRepoImpl(ApiHelper()))),
+        BlocProvider(
+          create: (context) => LanguageBloc(),
+        ),
       ],
       child: ScreenUtilInit(
         minTextAdapt: true,
         splitScreenMode: true,
-        child: MaterialApp.router(
-          builder: FlutterSmartDialog.init(),
-          theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-          routerConfig: appRouter.router,
-          debugShowCheckedModeBanner: false,
+        child: BlocBuilder<LanguageBloc, LanguageState>(
+          builder: (context, state) {
+            return MaterialApp.router(
+              builder: FlutterSmartDialog.init(),
+              theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+              routerConfig: appRouter.router,
+              debugShowCheckedModeBanner: false,
+              locale:
+                  state is AppChangeLanguage ? Locale(state.langCode) : null,
+              localizationsDelegates: const [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: S.delegate.supportedLocales,
+              localeListResolutionCallback: (deviceLocales, supportedLocales) {
+                if (deviceLocales != null) {
+                  for (var deviceLocale in deviceLocales) {
+                    for (var supportedLocale in supportedLocales) {
+                      if (deviceLocale.languageCode ==
+                          supportedLocale.languageCode) {
+                        return deviceLocale;
+                      }
+                    }
+                  }
+                }
+                return supportedLocales.first;
+              },
+            );
+          },
         ),
       ),
     );

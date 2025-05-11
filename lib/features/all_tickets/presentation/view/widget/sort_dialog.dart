@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ticketian_model.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/widget/drop_down_text_field.dart';
 import '../../view_model/cubit/ticket_cubit.dart';
 
@@ -29,7 +30,7 @@ class SortDialogState extends State<SortDialog> {
     );
     if (picked != null) {
       setState(() {
-        controller.text = DateFormat('yyyy-MM-dd').format(picked);
+        controller.text = DateFormat('yyyy-MM-dd', 'en').format(picked);
       });
     }
   }
@@ -37,7 +38,7 @@ class SortDialogState extends State<SortDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Filter Tickets"),
+      title: Text(S.of(context).filterTickets),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -49,7 +50,7 @@ class SortDialogState extends State<SortDialog> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
-                  labelText: "from",
+                  labelText: S.of(context).from,
                   suffixIcon: const Icon(Icons.calendar_today),
                 ),
               ),
@@ -64,7 +65,7 @@ class SortDialogState extends State<SortDialog> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
-                  labelText: "to",
+                  labelText: S.of(context).to,
                   suffixIcon: const Icon(Icons.calendar_today),
                 ),
               ),
@@ -105,20 +106,24 @@ class SortDialogState extends State<SortDialog> {
                 from: from, to: to, ticketianId: ticketianId);
             Navigator.of(context).pop();
           },
-          child: const Text("Apply"),
+          child: Text(S.of(context).apply),
         ),
         TextButton(
           onPressed: () {
-            context.read<TicketCubit>().fetchTickets();
+            context.read<TicketCubit>()
+              ..currentPage = 1
+              ..hasMore = true
+              ..allTickets.clear()
+              ..fetchTickets();
             Navigator.of(context).pop();
           },
-          child: const Text("Show All"),
+          child: Text(S.of(context).showAll),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: Text(S.of(context).cancel),
         ),
       ],
     );

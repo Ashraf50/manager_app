@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/widget/custom_text_field.dart';
+import 'package:manager_app/generated/l10n.dart';
 import '../../../../../core/constant/app_colors.dart';
 import '../../../../../core/widget/custom_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -92,50 +93,50 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                 children: [
                   Center(
                     child: Text(
-                      "Create New Password",
+                      S.of(context).create_new_pass,
                       style: AppStyles.textStyle20blackBold.copyWith(height: 2),
                     ),
                   ),
                   Center(
                     child: Text(
-                      "your new password must be different\n from previous used password",
+                      "${S.of(context).create_pass1}\n ${S.of(context).create_pass2}",
                       style: AppStyles.textStyle18black,
                       textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(height: 30.h),
                   Text(
-                    "Email",
+                    S.of(context).Email,
                     style: AppStyles.textStyle18black,
                   ),
                   CustomTextfield(
-                    hintText: "Enter your email",
+                    hintText: S.of(context).email,
                     obscureText: false,
                     controller: emailController,
                     prefixIcon: const Icon(Icons.email),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       return value != null && !EmailValidator.validate(value)
-                          ? " Enter a valid email"
+                          ? S.of(context).enter_valid_email
                           : null;
                     },
                   ),
                   Text(
-                    "Code",
+                    S.of(context).code,
                     style: AppStyles.textStyle18black,
                   ),
                   CustomTextfield(
-                    hintText: "Enter code",
+                    hintText: S.of(context).enter_code,
                     obscureText: false,
                     controller: codeController,
                     prefixIcon: const Icon(Icons.code),
                   ),
                   Text(
-                    "password",
+                    S.of(context).Password,
                     style: AppStyles.textStyle18black,
                   ),
                   CustomTextfield(
-                    hintText: "Enter new password",
+                    hintText: S.of(context).password,
                     obscureText: visibility,
                     prefixIcon: const Icon(Icons.lock_sharp),
                     suffixIcon: IconButton(
@@ -158,18 +159,18 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
                       if (value!.length < 6) {
-                        return "your password is too short";
+                        return S.of(context).pass_short;
                       } else {
                         return null;
                       }
                     },
                   ),
                   Text(
-                    "confirm password",
+                    S.of(context).confirmPassword,
                     style: AppStyles.textStyle18black,
                   ),
                   CustomTextfield(
-                    hintText: "Confirm password",
+                    hintText: S.of(context).confirmPassword,
                     prefixIcon: const Icon(Icons.lock_sharp),
                     obscureText: visibility,
                     suffixIcon: IconButton(
@@ -191,7 +192,7 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                     controller: confirmPasswordController,
                   ),
                   CustomButton(
-                    title: "Reset password",
+                    title: S.of(context).reset_pass,
                     color: passwordController.text.isEmpty
                         ? AppColors.inActiveBlue
                         : AppColors.activeBlue,
@@ -207,12 +208,12 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                           );
                         } else {
                           CustomToast.show(
-                            message: "check email or password",
+                            message: S.of(context).check_email,
                           );
                         }
                       } else {
                         CustomToast.show(
-                          message: "password not match",
+                          message: S.of(context).pass_not_match,
                         );
                       }
                     },

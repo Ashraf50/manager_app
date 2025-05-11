@@ -3,6 +3,7 @@ import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/widget/custom_scaffold.dart';
 import 'package:manager_app/core/widget/custom_search.dart';
 import 'package:manager_app/features/chat/presentation/view/widget/chats_list_view.dart';
+import 'package:manager_app/generated/l10n.dart';
 
 class ChatViewBody extends StatelessWidget {
   const ChatViewBody({super.key});
@@ -14,9 +15,9 @@ class ChatViewBody extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
           children: [
-            const CustomSearch(
-              hintText: "search",
-              prefixIcon: Icon(
+            CustomSearch(
+              hintText: S.of(context).search,
+              prefixIcon: const Icon(
                 Icons.search,
                 color: Colors.grey,
               ),
@@ -25,7 +26,7 @@ class ChatViewBody extends StatelessWidget {
               height: 10,
             ),
             Text(
-              "Chats",
+              S.of(context).chats,
               style: AppStyles.textStyle18bold,
             ),
             const SizedBox(

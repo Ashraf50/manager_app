@@ -5,6 +5,7 @@ import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/constant/func/data_format.dart';
 import 'package:manager_app/features/notification/data/model/notification_model/notification_model.dart';
 import 'package:manager_app/features/notification/presentation/view_model/cubit/read_notification_cubit.dart';
+import 'package:manager_app/generated/l10n.dart';
 
 class NotificationCard extends StatelessWidget {
   final NotificationModel notification;
@@ -49,7 +50,7 @@ class NotificationCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${dateTimeFormat(notification.createdAt.toString(), 'h')} hours ago",
+                      "${dateTimeFormat(notification.createdAt.toString(), 'h')} ${S.of(context).hour}",
                       style: AppStyles.textStyle16,
                       softWrap: true,
                     ),
@@ -59,13 +60,13 @@ class NotificationCard extends StatelessWidget {
                   color: Colors.white,
                   icon: const Icon(Icons.more_horiz),
                   itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'read',
-                      child: Text('Read'),
+                      child: Text(S.of(context).read),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'delete',
-                      child: Text('Delete'),
+                      child: Text(S.of(context).delete),
                     ),
                   ],
                   onSelected: (value) {
@@ -90,13 +91,12 @@ class NotificationCard extends StatelessWidget {
   void _showFinishDialog(BuildContext context) {
     SmartDialog.show(
       builder: (_) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content:
-            const Text('Are you sure you want to delete this Notification?'),
+        title: Text(S.of(context).confirm_delete),
+        content: Text(S.of(context).sure_delete_notification),
         actions: [
           TextButton(
             onPressed: () => SmartDialog.dismiss(),
-            child: const Text('Cancel'),
+            child: Text(S.of(context).cancel),
           ),
           TextButton(
             onPressed: () {
@@ -105,7 +105,8 @@ class NotificationCard extends StatelessWidget {
                   .deleteNotification(notification.id!);
               SmartDialog.dismiss();
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(S.of(context).delete,
+                style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
