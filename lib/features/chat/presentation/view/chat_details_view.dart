@@ -57,6 +57,7 @@ class _ChatDetailsViewState extends State<ChatDetailsView> {
           loggedUserId: id,
           conversationId: widget.conversation.id!,
           onNewMessage: (message) {
+              print("New message from Pusher: ${message.content}");
             _messageCubit.addNewMessage(message);
           },
         );

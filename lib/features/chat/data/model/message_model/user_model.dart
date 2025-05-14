@@ -1,11 +1,12 @@
 class UserModel {
   final int id;
   final String name;
-  final String avatar;
+  final String? avatar;
+
   UserModel({
     required this.id,
     required this.name,
-    required this.avatar,
+    this.avatar,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {

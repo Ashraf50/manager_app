@@ -50,8 +50,13 @@ class PusherCubit extends Cubit<PusherState> {
               event.channelName == 'conversations.$conversationId') {
             try {
               final data = jsonDecode(event.data!);
-              final message = MessageModel.fromJson(data);
-              onNewMessage(message);
+              final messageJson = data['message'];
+              if (messageJson != null && messageJson is Map<String, dynamic>) {
+                final message = MessageModel.fromJson(messageJson);
+                onNewMessage(message);
+              } else {
+                print("❌ Invalid message data from Pusher: $messageJson");
+              }
             } catch (e) {
               print("Error parsing new message: $e");
             }

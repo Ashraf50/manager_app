@@ -59,6 +59,7 @@ class MessageCubit extends Cubit<MessageState> {
   }
 
   void addNewMessage(MessageModel message) {
+    print("Adding message to state: ${message.content}");
     if (!allMessages.any((m) => m.id == message.id)) {
       allMessages.add(message);
       emit(MessageLoaded(

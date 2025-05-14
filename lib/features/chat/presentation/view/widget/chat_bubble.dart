@@ -20,13 +20,14 @@ class ChatBubbleFriend extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
               color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(32),
-                topLeft: Radius.circular(32),
-                bottomRight: Radius.circular(32),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(16),
+                topLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16),
               ),
             ),
             child: Column(
@@ -62,7 +63,7 @@ class ChatBubbleFriend extends StatelessWidget {
             padding: const EdgeInsets.only(left: 5),
             child: Text(
               dateTimeFormat(
-                message.createdAt!.toString(),
+                message.createdAt.toString(),
                 'hh:mm a',
               ),
               style: const TextStyle(fontSize: 12),
@@ -90,13 +91,13 @@ class ChatBubble extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(15),
             decoration: const BoxDecoration(
               color: AppColors.buttonDrawer,
               borderRadius: BorderRadius.only(
-                topRight: Radius.circular(32),
-                topLeft: Radius.circular(32),
-                bottomLeft: Radius.circular(32),
+                topRight: Radius.circular(16),
+                topLeft: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
               ),
             ),
             child: Column(
