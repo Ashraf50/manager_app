@@ -8,9 +8,9 @@ class MessageLoading extends MessageState {}
 
 class MessageLoaded extends MessageState {
   final List<MessageModel> messages;
-  final bool isNewMessages;
-  MessageLoaded(this.messages, {this.isNewMessages = false});
-  List<Object> get props => [messages, isNewMessages];
+  MessageLoaded(
+    this.messages,
+  );
 }
 
 class MessageError extends MessageState {

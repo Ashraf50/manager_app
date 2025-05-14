@@ -37,7 +37,10 @@ class MessageCubit extends Cubit<MessageState> {
       if (fetchedMessages.isEmpty) {
         hasMore = false;
       } else {
-        allMessages = [...fetchedMessages, ...allMessages];
+        allMessages = [
+          ...allMessages,
+          ...fetchedMessages,
+        ];
         currentPage++;
       }
       _emitMessages();
@@ -57,8 +60,10 @@ class MessageCubit extends Cubit<MessageState> {
 
   void addNewMessage(MessageModel message) {
     if (!allMessages.any((m) => m.id == message.id)) {
-      allMessages.insert(0, message);
-      emit(MessageLoaded(List.from(allMessages), isNewMessages: true));
+      allMessages.add(message);
+      emit(MessageLoaded(
+        List.from(allMessages),
+      ));
     }
   }
 
@@ -105,7 +110,9 @@ class MessageCubit extends Cubit<MessageState> {
     }
   }
 
-  void _emitMessages({bool isNewMessages = false}) {
-    emit(MessageLoaded(List.from(allMessages), isNewMessages: isNewMessages));
+  void _emitMessages() {
+    emit(MessageLoaded(
+      List.from(allMessages),
+    ));
   }
 }

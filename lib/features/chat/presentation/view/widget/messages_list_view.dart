@@ -67,17 +67,15 @@ class _MessagesListViewState extends State<MessagesListView> {
   Widget build(BuildContext context) {
     return BlocConsumer<MessageCubit, MessageState>(
       listener: (context, state) {
-        if (state is MessageLoaded && state.messages.isNotEmpty) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (state.isNewMessages) {
-              _scrollController.animateTo(
-                0,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
-            }
-          });
-        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        });
       },
       builder: (context, state) {
         if (state is MessageInitial || state is MessageLoading) {
@@ -89,7 +87,6 @@ class _MessagesListViewState extends State<MessagesListView> {
           return ListView.builder(
             controller: _scrollController,
             itemCount: state.messages.length,
-            reverse: true,
             itemBuilder: (context, index) {
               final message = state.messages[index];
               final isMe = message.user.id == int.tryParse(myId ?? '');
