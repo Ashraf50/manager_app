@@ -10,6 +10,10 @@ import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/create_ticketian_cubit.dart';
 import 'package:manager_app/features/all_tickets/data/repo/ticket_repo_impl.dart';
 import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
+import 'package:manager_app/features/chat/data/repo/chat_repo_impl.dart';
+import 'package:manager_app/features/chat/presentation/view_model/cubit/chat_cubit.dart';
+import 'package:manager_app/features/chat/presentation/view_model/cubit/pusher_cubit.dart';
+import 'package:manager_app/features/chat/presentation/view_model/message_cubit/message_cubit.dart';
 import 'package:manager_app/features/dashboard/data/repo/dashboard_repo_impl.dart';
 import 'package:manager_app/features/dashboard/presentation/view_model/cubit/statistics_cubit.dart';
 import 'package:manager_app/features/home/presentation/view_model/cubit/user_data_cubit.dart';
@@ -62,7 +66,16 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 CreateTicketianCubit(TicketianRepoImpl(ApiHelper()))),
         BlocProvider(
+          create: (context) => ChatCubit((ChatRepoImpl())),
+        ),
+        BlocProvider(
           create: (context) => LanguageBloc(),
+        ),
+        BlocProvider(
+          create: (context) => PusherCubit(),
+        ),
+        BlocProvider(
+          create: (context) => MessageCubit(ChatRepoImpl()),
         ),
       ],
       child: ScreenUtilInit(

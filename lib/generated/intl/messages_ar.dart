@@ -40,6 +40,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "assign": MessageLookupByLibrary.simpleMessage("تعيين"),
         "cancel": MessageLookupByLibrary.simpleMessage("إلغاء"),
         "chat": MessageLookupByLibrary.simpleMessage("دردشة"),
+        "chat_with_ticket":
+            MessageLookupByLibrary.simpleMessage("الدردشة مع مسؤول التذاكر"),
+        "chat_with_user":
+            MessageLookupByLibrary.simpleMessage("الدردشة مع المستخدم"),
         "chats": MessageLookupByLibrary.simpleMessage("الدردشات"),
         "check_data":
             MessageLookupByLibrary.simpleMessage("تحقق من البيانات الخاصة بك"),
@@ -56,6 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
         "confirm_delete": MessageLookupByLibrary.simpleMessage("تأكيد الحذف"),
         "confirm_finish": MessageLookupByLibrary.simpleMessage("تأكيد الإنهاء"),
+        "copy": MessageLookupByLibrary.simpleMessage("نسخ"),
         "createNew": MessageLookupByLibrary.simpleMessage("إنشاء جديد"),
         "create_new_pass":
             MessageLookupByLibrary.simpleMessage("إنشاء كلمة مرور جديدة"),
@@ -67,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dailyRespond": MessageLookupByLibrary.simpleMessage("الرد اليومي"),
         "dashboard": MessageLookupByLibrary.simpleMessage("لوحة التحكم"),
         "delete": MessageLookupByLibrary.simpleMessage("حذف"),
+        "delete_for_all": MessageLookupByLibrary.simpleMessage("حذف للجميع"),
         "details": MessageLookupByLibrary.simpleMessage("التفاصيل"),
         "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
         "editProfile":
@@ -94,8 +100,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "logoutAccount": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
         "manager_name": MessageLookupByLibrary.simpleMessage("اسم المدير"),
         "name": MessageLookupByLibrary.simpleMessage("الاسم"),
+        "no_conversations":
+            MessageLookupByLibrary.simpleMessage("لا توجد محادثات بعد"),
         "no_details":
             MessageLookupByLibrary.simpleMessage("لا توجد تفاصيل متاحة"),
+        "no_messages":
+            MessageLookupByLibrary.simpleMessage("لا توجد رسائل بعد"),
         "no_tickets": MessageLookupByLibrary.simpleMessage("لا توجد تذاكر"),
         "notification": MessageLookupByLibrary.simpleMessage("الإشعارات"),
         "notification_deleted_successfully":
@@ -109,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("أدخل كلمة المرور"),
         "pending": MessageLookupByLibrary.simpleMessage("قيد الانتظار"),
         "phone": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
+        "quick_chat": MessageLookupByLibrary.simpleMessage("دردشة سريعة"),
         "read": MessageLookupByLibrary.simpleMessage("مقروء"),
         "recentTickets": MessageLookupByLibrary.simpleMessage("أحدث التذاكر"),
         "reset_desc1": MessageLookupByLibrary.simpleMessage(
@@ -122,6 +133,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "search": MessageLookupByLibrary.simpleMessage("بحث"),
         "selectTicketian":
             MessageLookupByLibrary.simpleMessage("اختر مسؤول التذاكر"),
+        "send_message": MessageLookupByLibrary.simpleMessage("إرسال رسالة"),
         "service_name": MessageLookupByLibrary.simpleMessage("اسم الخدمة"),
         "setting": MessageLookupByLibrary.simpleMessage("الإعدادات"),
         "showAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
@@ -136,6 +148,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "هل أنت متأكد أنك تريد إنهاء هذه التذكرة؟"),
         "take_photo": MessageLookupByLibrary.simpleMessage("التقط صورة"),
         "technicians": MessageLookupByLibrary.simpleMessage("مسؤولين التذاكر"),
+        "ticketId": MessageLookupByLibrary.simpleMessage("معرف التذكرة"),
         "ticket_details":
             MessageLookupByLibrary.simpleMessage("تفاصيل التذكرة"),
         "ticketian_created_successfully": MessageLookupByLibrary.simpleMessage(

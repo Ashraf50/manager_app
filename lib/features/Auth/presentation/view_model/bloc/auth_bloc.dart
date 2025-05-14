@@ -25,11 +25,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             }
             final token = result['data']['token'];
             final refreshToken = result['data']['refresh_token'];
+            final userId = user['id'].toString();
             emit(LoginSuccess(successMessage: result['message'], token: token));
             const FlutterSecureStorage secureStorage = FlutterSecureStorage();
             await secureStorage.write(key: 'auth_token', value: token);
             await secureStorage.write(
                 key: 'refresh_token', value: refreshToken);
+            await secureStorage.write(key: 'user_id', value: userId);
           }
         } catch (e) {
           emit(LoginFailure(errMessage: e.toString()));

@@ -6,7 +6,10 @@ final class ReadNotificationInitial extends ReadNotificationState {}
 
 class ReadNotificationLoading extends ReadNotificationState {}
 
-class ReadNotificationSuccess extends ReadNotificationState {}
+class ReadNotificationSuccess extends ReadNotificationState {
+    final String notificationId;
+      ReadNotificationSuccess({required this.notificationId});
+}
 
 class ReadNotificationFailure extends ReadNotificationState {
   final String errMessage;

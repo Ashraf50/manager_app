@@ -8,7 +8,6 @@ import 'package:manager_app/features/home/presentation/view/widget/manager_drawe
 import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
 import 'package:manager_app/generated/l10n.dart';
 import '../../../add_ticketian/presentation/view/add_ticketian_view.dart';
-import '../../../chat/presentation/view/chat_view.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -27,7 +26,6 @@ class _ManagerHomeViewState extends State<ManagerHomeView> {
   final List<Widget> pages = const [
     DashboardView(),
     AllTicketsView(),
-    ChatView(),
     AddTicketianView(),
     SettingsView(),
   ];
@@ -39,7 +37,6 @@ class _ManagerHomeViewState extends State<ManagerHomeView> {
         title: [
           S.of(context).dashboard,
           S.of(context).allTickets,
-          S.of(context).chat,
           S.of(context).addTicketian,
           S.of(context).setting
         ][widget.selectedIndex],

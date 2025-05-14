@@ -1009,6 +1009,96 @@ class S {
       args: [],
     );
   }
+
+  /// `No conversations yet`
+  String get no_conversations {
+    return Intl.message(
+      'No conversations yet',
+      name: 'no_conversations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Messages yet`
+  String get no_messages {
+    return Intl.message(
+      'No Messages yet',
+      name: 'no_messages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy`
+  String get copy {
+    return Intl.message(
+      'Copy',
+      name: 'copy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete for all`
+  String get delete_for_all {
+    return Intl.message(
+      'Delete for all',
+      name: 'delete_for_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Message`
+  String get send_message {
+    return Intl.message(
+      'Send Message',
+      name: 'send_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket ID`
+  String get ticketId {
+    return Intl.message(
+      'Ticket ID',
+      name: 'ticketId',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quick Chat`
+  String get quick_chat {
+    return Intl.message(
+      'Quick Chat',
+      name: 'quick_chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chat With User`
+  String get chat_with_user {
+    return Intl.message(
+      'Chat With User',
+      name: 'chat_with_user',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chat With Ticketian`
+  String get chat_with_ticket {
+    return Intl.message(
+      'Chat With Ticketian',
+      name: 'chat_with_ticket',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

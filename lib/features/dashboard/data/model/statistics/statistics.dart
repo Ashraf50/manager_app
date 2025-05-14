@@ -15,7 +15,8 @@ class StatisticsModel {
     this.showToast,
   });
 
-  factory StatisticsModel.fromJson(Map<String, dynamic> json) => StatisticsModel(
+  factory StatisticsModel.fromJson(Map<String, dynamic> json) =>
+      StatisticsModel(
         data: json['data'] == null
             ? null
             : Data.fromJson(json['data'] as Map<String, dynamic>),

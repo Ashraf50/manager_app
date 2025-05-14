@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:manager_app/features/notification/data/repo/notification_repo.dart';
-
 part 'read_notification_state.dart';
 
 class ReadNotificationCubit extends Cubit<ReadNotificationState> {
@@ -13,7 +12,7 @@ class ReadNotificationCubit extends Cubit<ReadNotificationState> {
     final result = await notificationRepo.markNotificationAsRead(id);
     result.fold(
       (failure) => emit(ReadNotificationFailure(failure.errMessage)),
-      (_) => emit(ReadNotificationSuccess()),
+      (_) => emit(ReadNotificationSuccess(notificationId: id)),
     );
   }
 

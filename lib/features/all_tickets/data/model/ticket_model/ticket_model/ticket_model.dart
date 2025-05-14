@@ -13,7 +13,7 @@ class TicketModel {
   User? user;
   Manager? manager;
   Technician? technician;
-  
+
   TicketModel({
     this.id,
     this.title,

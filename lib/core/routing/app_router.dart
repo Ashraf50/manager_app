@@ -4,7 +4,7 @@ import 'package:manager_app/features/add_ticketian/presentation/view/widget/add_
 import 'package:manager_app/features/add_ticketian/presentation/view/widget/ticketian_details_view.dart';
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/presentation/view/widget/assign_ticket_view.dart';
-import 'package:manager_app/features/chat/presentation/view/widget/chat_details_view.dart';
+import 'package:manager_app/features/chat/presentation/view/chat_details_view.dart';
 import 'package:manager_app/features/dashboard/data/model/statistics/recent_ticket.dart';
 import 'package:manager_app/features/home/presentation/view/widget/edit_profile_view.dart';
 import 'package:manager_app/features/notification/data/model/notification_model/notification_model.dart';
@@ -12,6 +12,7 @@ import 'package:manager_app/features/notification/presentation/view/notification
 import 'package:manager_app/features/notification/presentation/view/widget/notification_details_view_body.dart';
 import '../../features/Auth/presentation/view/forget_password_view.dart';
 import '../../features/Auth/presentation/view/sign_in_view.dart';
+import '../../features/chat/data/model/chat_detailing_args.dart';
 import '../../features/dashboard/presentation/view/widget/ticket_details.dart';
 import '../../features/home/data/model/user_model/user_model.dart';
 import '../widget/photo_view.dart';
@@ -86,9 +87,14 @@ class AppRouter {
         builder: (context, state) => const AddNewTicketian(),
       ),
       GoRoute(
-        path: '/chat_details',
-        builder: (context, state) => const ChatDetailsView(),
-      ),
+          path: '/chat_details',
+          builder: (context, state) {
+            final args = state.extra as ChatDetailsArgs;
+            return ChatDetailsView(
+              conversation: args.conversation,
+              ticketId: args.ticketId,
+            );
+          }),
       GoRoute(
         path: '/notification_view',
         builder: (context, state) => const NotificationView(),

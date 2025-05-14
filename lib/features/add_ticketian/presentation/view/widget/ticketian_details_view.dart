@@ -17,7 +17,7 @@ class TicketianDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar:  CustomAppBar(title:S.of(context).ticketian_details ),
+      appBar: CustomAppBar(title: S.of(context).ticketian_details),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(

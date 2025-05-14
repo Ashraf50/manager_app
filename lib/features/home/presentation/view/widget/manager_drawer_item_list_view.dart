@@ -26,10 +26,6 @@ class ManagerDrawerItemsListView extends StatelessWidget {
         image: Assets.ticket,
       ),
       DrawerItemModel(
-        title: S.of(context).chat,
-        image: Assets.chat,
-      ),
-      DrawerItemModel(
         title: S.of(context).addTicketian,
         image: Assets.addTicketian,
       ),

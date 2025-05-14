@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/constant/app_colors.dart';
 import 'package:manager_app/core/constant/func/data_format.dart';
+import 'package:manager_app/features/chat/data/model/message_model/message_model.dart';
 
 class ChatBubbleFriend extends StatelessWidget {
+  final MessageModel message;
   const ChatBubbleFriend({
     super.key,
+    required this.message,
   });
 
   @override
@@ -15,26 +19,53 @@ class ChatBubbleFriend extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(15),
             margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(32),
+                topLeft: Radius.circular(32),
+                bottomRight: Radius.circular(32),
               ),
             ),
-            child: const Text(
-              "massage.message!",
-              style: TextStyle(fontSize: 18, color: Colors.black),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (message.content != null && message.content!.isNotEmpty)
+                  Text(
+                    message.content!,
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                if (message.media != null && message.media!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: InkWell(
+                        onTap: () {
+                          context.push('/photo_view', extra: message.media);
+                        },
+                        child: Image.network(
+                          message.media!,
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Text(
               dateTimeFormat(
-                "2025-04-28T21:23:15.000000Z",
+                message.createdAt!.toString(),
                 'hh:mm a',
               ),
+              style: const TextStyle(fontSize: 12),
             ),
           )
         ],
@@ -44,8 +75,10 @@ class ChatBubbleFriend extends StatelessWidget {
 }
 
 class ChatBubble extends StatelessWidget {
+  final MessageModel message;
   const ChatBubble({
     super.key,
+    required this.message,
   });
 
   @override
@@ -56,26 +89,53 @@ class ChatBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
-            padding: const EdgeInsets.all(15),
             margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(10),
             decoration: const BoxDecoration(
               color: AppColors.buttonDrawer,
-              borderRadius: BorderRadius.all(
-                Radius.circular(32),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(32),
+                topLeft: Radius.circular(32),
+                bottomLeft: Radius.circular(32),
               ),
             ),
-            child: const Text(
-              "message",
-              style: TextStyle(fontSize: 18, color: Colors.white),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (message.content != null && message.content!.isNotEmpty)
+                  Text(
+                    message.content!,
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                if (message.media != null && message.media!.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: InkWell(
+                        onTap: () {
+                          context.push('/photo_view', extra: message.media);
+                        },
+                        child: Image.network(
+                          message.media!,
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 5),
             child: Text(
               dateTimeFormat(
-                "2025-04-28T21:23:15.000000Z",
+                message.createdAt!.toString(),
                 'hh:mm a',
               ),
+              style: const TextStyle(fontSize: 12),
             ),
           )
         ],

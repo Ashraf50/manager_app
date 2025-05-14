@@ -39,6 +39,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "assign": MessageLookupByLibrary.simpleMessage("Assign"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "chat": MessageLookupByLibrary.simpleMessage("chat"),
+        "chat_with_ticket":
+            MessageLookupByLibrary.simpleMessage("Chat With Ticketian"),
+        "chat_with_user":
+            MessageLookupByLibrary.simpleMessage("Chat With User"),
         "chats": MessageLookupByLibrary.simpleMessage("Chats"),
         "check_data": MessageLookupByLibrary.simpleMessage("Check your data"),
         "check_email":
@@ -55,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Confirm Delete"),
         "confirm_finish":
             MessageLookupByLibrary.simpleMessage("Confirm Finish"),
+        "copy": MessageLookupByLibrary.simpleMessage("Copy"),
         "createNew": MessageLookupByLibrary.simpleMessage("Create New"),
         "create_new_pass":
             MessageLookupByLibrary.simpleMessage("Create New Password"),
@@ -66,6 +71,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dailyRespond": MessageLookupByLibrary.simpleMessage("Daily Respond"),
         "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "delete_for_all":
+            MessageLookupByLibrary.simpleMessage("Delete for all"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
@@ -92,8 +99,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "logoutAccount": MessageLookupByLibrary.simpleMessage("Logout Account"),
         "manager_name": MessageLookupByLibrary.simpleMessage("Manager Name"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "no_conversations":
+            MessageLookupByLibrary.simpleMessage("No conversations yet"),
         "no_details":
             MessageLookupByLibrary.simpleMessage("No Details Available"),
+        "no_messages": MessageLookupByLibrary.simpleMessage("No Messages yet"),
         "no_tickets": MessageLookupByLibrary.simpleMessage("No Tickets"),
         "notification": MessageLookupByLibrary.simpleMessage("Notification"),
         "notification_deleted_successfully":
@@ -108,6 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("Enter your Password"),
         "pending": MessageLookupByLibrary.simpleMessage("Pending"),
         "phone": MessageLookupByLibrary.simpleMessage("Phone"),
+        "quick_chat": MessageLookupByLibrary.simpleMessage("Quick Chat"),
         "read": MessageLookupByLibrary.simpleMessage("Read"),
         "recentTickets": MessageLookupByLibrary.simpleMessage("Recent Tickets"),
         "reset_desc1":
@@ -121,6 +132,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "search": MessageLookupByLibrary.simpleMessage("search"),
         "selectTicketian":
             MessageLookupByLibrary.simpleMessage("Select Ticketian"),
+        "send_message": MessageLookupByLibrary.simpleMessage("Send Message"),
         "service_name": MessageLookupByLibrary.simpleMessage("Service Name"),
         "setting": MessageLookupByLibrary.simpleMessage("Settings"),
         "showAll": MessageLookupByLibrary.simpleMessage("Show All"),
@@ -135,6 +147,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to finish this Ticket?"),
         "take_photo": MessageLookupByLibrary.simpleMessage("Take Photo"),
         "technicians": MessageLookupByLibrary.simpleMessage("Technicians"),
+        "ticketId": MessageLookupByLibrary.simpleMessage("Ticket ID"),
         "ticket_details":
             MessageLookupByLibrary.simpleMessage("Ticket Details"),
         "ticketian_created_successfully": MessageLookupByLibrary.simpleMessage(

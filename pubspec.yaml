@@ -55,6 +55,7 @@ dependencies:
   firebase_core: ^3.13.0
   overlay_support: ^2.1.0
   shared_preferences: ^2.5.3
+  pusher_channels_flutter: ^2.4.0
 
 dev_dependencies:
   flutter_test:

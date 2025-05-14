@@ -94,5 +94,14 @@
     "create_pass1":"your new password must be different",
     "create_pass2":"from previous used password",
     "code":"Code",
-    "enter_code":"Enter Code"
+    "enter_code":"Enter Code",
+    "no_conversations":"No conversations yet",
+    "no_messages":"No Messages yet",
+    "copy":"Copy",
+    "delete_for_all":"Delete for all",
+    "send_message":"Send Message",
+    "ticketId":"Ticket ID",
+    "quick_chat":"Quick Chat",
+    "chat_with_user":"Chat With User",
+    "chat_with_ticket":"Chat With Ticketian"
 }
