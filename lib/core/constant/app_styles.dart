@@ -24,8 +24,8 @@ class AppStyles {
     color: Colors.black,
     fontWeight: FontWeight.bold,
   );
-  static TextStyle textStyle16Black = TextStyle(
-    fontSize: 16.sp,
+  static TextStyle textStyle16Black = const TextStyle(
+    fontSize: 16,
     color: Colors.black,
   );
   static TextStyle textStyle16 = TextStyle(
@@ -36,8 +36,8 @@ class AppStyles {
     fontSize: 16.sp,
     color: Colors.white,
   );
-  static TextStyle textStyle18bold = TextStyle(
-    fontSize: 18.sp,
+  static TextStyle textStyle18bold = const TextStyle(
+    fontSize: 18,
     fontWeight: FontWeight.bold,
   );
 }

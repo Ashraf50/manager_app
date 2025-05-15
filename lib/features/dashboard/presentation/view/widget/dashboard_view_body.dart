@@ -12,6 +12,7 @@ import 'package:manager_app/features/dashboard/presentation/view_model/cubit/sta
 import 'package:manager_app/generated/l10n.dart';
 import '../../../../all_tickets/presentation/view/widget/ticket_card.dart';
 import 'custom_card.dart';
+import 'custom_card_shimmer.dart';
 
 class DashboardViewBody extends StatefulWidget {
   const DashboardViewBody({super.key});
@@ -34,9 +35,21 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
         child: BlocBuilder<StatisticsCubit, StatisticsState>(
           builder: (context, state) {
             if (state is StatisticsLoading) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 80),
-                child: Center(child: CircularProgressIndicator()),
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  return GridView.count(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    crossAxisCount: constraints.maxWidth < 600 ? 2 : 4,
+                    mainAxisSpacing: 5,
+                    crossAxisSpacing: 5,
+                    childAspectRatio: 0.85,
+                    children: List.generate(
+                      5,
+                      (index) => const CustomCardShimmer(),
+                    ),
+                  );
+                },
               );
             } else if (state is StatisticsError) {
               return Center(child: Text(state.message));
@@ -74,6 +87,7 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             percentage: "100%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
+                            progress: 1.0,
                           ),
                           CustomCard(
                             title: S.of(context).closedTickets,
@@ -81,6 +95,9 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             percentage: "$closedPercentage%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
+                            progress: totalTickets > 0
+                                ? closedTickets / totalTickets
+                                : 0.0,
                           ),
                           CustomCard(
                             title: S.of(context).ProgressTickets,
@@ -88,6 +105,9 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             percentage: "$inProgressPercentage%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
+                            progress: totalTickets > 0
+                                ? inProgressTickets / totalTickets
+                                : 0.0,
                           ),
                           CustomCard(
                             title: S.of(context).openTickets,
@@ -95,6 +115,9 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             percentage: "$openPercentage%",
                             iconAsset: Assets.ticket,
                             circleColor: AppColors.darkBlue,
+                            progress: totalTickets > 0
+                                ? openTickets / totalTickets
+                                : 0.0,
                           ),
                           CustomCard(
                             title: S.of(context).technicians,
@@ -102,6 +125,7 @@ class _DashboardViewBodyState extends State<DashboardViewBody> {
                             percentage: "100%",
                             iconAsset: Assets.users,
                             circleColor: AppColors.darkBlue,
+                            progress: 1.0,
                           ),
                         ],
                       );
