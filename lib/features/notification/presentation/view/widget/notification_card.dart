@@ -116,7 +116,7 @@ class NotificationCard extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          dateTimeFormat(notification.createdAt.toString(), 'h:mm'),
+          dateTimeFormat(notification.createdAt.toString(), 'h:mm a'),
           style: AppStyles.textStyle16.copyWith(
             color: colorScheme.onSurfaceVariant.withOpacity(0.5),
             fontSize: 15,
