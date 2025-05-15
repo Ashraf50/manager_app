@@ -30,11 +30,17 @@ class NotificationViewBody extends StatelessWidget {
                 backgroundColor: Colors.red,
               );
             }
-            if (state is DeleteNotificationSuccess ||
-                state is ReadNotificationSuccess) {
+            if (state is DeleteNotificationSuccess) {
               context.read<NotificationCubit>().fetchNotifications(reset: true);
               CustomToast.show(
                 message: S.of(context).notification_deleted_successfully,
+                backgroundColor: AppColors.toastColor,
+              );
+            }
+            if (state is ReadNotificationSuccess) {
+              context.read<NotificationCubit>().fetchNotifications(reset: true);
+              CustomToast.show(
+                message: S.of(context).notification_marked_as_read,
                 backgroundColor: AppColors.toastColor,
               );
             }

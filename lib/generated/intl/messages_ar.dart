@@ -110,6 +110,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notification": MessageLookupByLibrary.simpleMessage("الإشعارات"),
         "notification_deleted_successfully":
             MessageLookupByLibrary.simpleMessage("تم حذف الإشعار بنجاح"),
+        "notification_marked_as_read":
+            MessageLookupByLibrary.simpleMessage("تم تعليم الإشعار كمقروء"),
         "null_value": MessageLookupByLibrary.simpleMessage("قيمة غير معروفة"),
         "openTickets": MessageLookupByLibrary.simpleMessage("التذاكر المفتوحة"),
         "pass_not_match":

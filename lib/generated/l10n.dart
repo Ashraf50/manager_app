@@ -1099,6 +1099,16 @@ class S {
       args: [],
     );
   }
+
+  /// `notification marked as read`
+  String get notification_marked_as_read {
+    return Intl.message(
+      'notification marked as read',
+      name: 'notification_marked_as_read',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

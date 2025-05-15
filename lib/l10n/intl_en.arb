@@ -103,5 +103,6 @@
     "ticketId":"Ticket ID",
     "quick_chat":"Quick Chat",
     "chat_with_user":"Chat With User",
-    "chat_with_ticket":"Chat With Ticketian"
+    "chat_with_ticket":"Chat With Ticketian",
+    "notification_marked_as_read":"notification marked as read"
 }

@@ -4,6 +4,8 @@ import 'package:manager_app/core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:manager_app/core/helper/api_helper.dart';
+import 'package:manager_app/core/helper/firebase_notification_helper.dart';
 import 'package:manager_app/features/Auth/data/repo/auth_repo_impl.dart';
 import 'package:manager_app/features/add_ticketian/data/repo/ticketian_repo_impl.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
@@ -20,7 +22,6 @@ import 'package:manager_app/features/home/presentation/view_model/cubit/user_dat
 import 'package:manager_app/features/notification/data/repo/notification_repo_impl.dart';
 import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
 import 'package:manager_app/generated/l10n.dart';
-import 'core/helper/api_helper.dart';
 import 'features/Auth/presentation/view_model/bloc/auth_bloc.dart';
 import 'features/home/data/repo/user_repo_impl.dart';
 import 'features/settings/presentation/view_model/language_bloc/language_bloc.dart';
@@ -58,10 +59,9 @@ class MyApp extends StatelessWidget {
             ..fetchStatistics(),
         ),
         BlocProvider(
-          create: (context) =>
-              NotificationCubit(NotificationRepoImpl(ApiHelper()))
-                ..fetchNotifications(),
-        ),
+            create: (context) =>
+                NotificationCubit(NotificationRepoImpl(ApiHelper()))
+                  ..fetchNotifications()),
         BlocProvider(
             create: (context) =>
                 CreateTicketianCubit(TicketianRepoImpl(ApiHelper()))),
@@ -83,6 +83,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         child: BlocBuilder<LanguageBloc, LanguageState>(
           builder: (context, state) {
+            FirebaseNotificationsHelper(context).init();
             return MaterialApp.router(
               builder: FlutterSmartDialog.init(),
               theme: ThemeData(scaffoldBackgroundColor: Colors.white),

@@ -109,6 +109,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "notification_deleted_successfully":
             MessageLookupByLibrary.simpleMessage(
                 "notification deleted successfully"),
+        "notification_marked_as_read":
+            MessageLookupByLibrary.simpleMessage("notification marked as read"),
         "null_value": MessageLookupByLibrary.simpleMessage("null"),
         "openTickets": MessageLookupByLibrary.simpleMessage("Open Tickets"),
         "pass_not_match":

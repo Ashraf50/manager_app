@@ -65,18 +65,32 @@ class _AllTicketsListViewState extends State<AllTicketsListView> {
                 itemCount: state.tickets.length,
                 itemBuilder: (context, index) {
                   final tickets = state.tickets[index];
-                  return InkWell(
-                    onTap: () {
-                      context.push(
-                        "/ticket_details",
-                        extra: tickets,
+                  return TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: Duration(milliseconds: 500 + (index * 100)),
+                    curve: Curves.easeOut,
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        child: Transform.translate(
+                          offset: Offset(0, 30 * (1 - value)),
+                          child: child,
+                        ),
                       );
                     },
-                    child: TicketCard(
-                      ticketName: tickets.title ?? '',
-                      userName: tickets.user?.name ?? '',
-                      status: tickets.status!,
-                      id: tickets.id!,
+                    child: InkWell(
+                      onTap: () {
+                        context.push(
+                          "/ticket_details",
+                          extra: tickets,
+                        );
+                      },
+                      child: TicketCard(
+                        ticketName: tickets.title ?? '',
+                        userName: tickets.user?.name ?? '',
+                        status: tickets.status!,
+                        id: tickets.id!,
+                      ),
                     ),
                   );
                 },

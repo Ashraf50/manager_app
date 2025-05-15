@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../view_model/cubit/user_data_cubit.dart';
+import 'user_info_shimmer.dart';
 
 class UserInfoListTile extends StatelessWidget {
   const UserInfoListTile({
@@ -77,7 +78,7 @@ class UserInfoListTile extends StatelessWidget {
             ),
           );
         } else if (state is GetUserDataLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const UserInfoShimmer();
         } else if (state is GetUserDataFailure) {
           return Center(child: Text(state.errMessage));
         } else {

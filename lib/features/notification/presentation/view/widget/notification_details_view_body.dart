@@ -15,30 +15,75 @@ class NotificationDetailsViewBody extends StatelessWidget {
     return CustomScaffold(
       appBar: CustomAppBar(title: notification.title!),
       body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              notification.body!,
-              style: AppStyles.textStyle18black,
+              notification.title!,
+              style: AppStyles.textStyle18black.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(
-              height: 8,
+            const SizedBox(height: 16),
+            const Divider(),
+            const SizedBox(height: 16),
+            Expanded(
+              child: Text(
+                notification.body!,
+                style: AppStyles.textStyle18black.copyWith(
+                  height: 1.5,
+                ),
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${dateTimeFormat(notification.createdAt.toString(), 'h : mm ')} ${S.of(context).hour}",
-                  style: AppStyles.textStyle16,
-                  softWrap: true,
-                ),
-                Text(
-                  dateTimeFormat(notification.createdAt.toString(), 'dd/M/y '),
-                  style: AppStyles.textStyle16,
-                  softWrap: true,
-                ),
-              ],
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHighest
+                    .withOpacity(0.3),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.access_time,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        "${dateTimeFormat(notification.createdAt.toString(), 'h')} ${S.of(context).hour}",
+                        style: AppStyles.textStyle16.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        dateTimeFormat(
+                            notification.createdAt.toString(), 'dd/M/y '),
+                        style: AppStyles.textStyle16.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
