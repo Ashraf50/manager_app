@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:manager_app/core/error/failure.dart';
 import 'package:manager_app/core/widget/custom_toast.dart';
 import 'package:manager_app/features/all_tickets/data/model/ticket_model/ticket_model/ticket_model.dart';
 import 'package:manager_app/features/all_tickets/data/repo/ticket_repo.dart';
@@ -102,6 +104,35 @@ class TicketCubit extends Cubit<TicketState> {
       (_) async {
         await fetchTickets(reset: true);
         return true;
+      },
+    );
+  }
+
+  Future<Either<Failure, TicketModel>> getTicketById(int ticketId) async {
+    emit(FetchTicketLoading());
+    final result = await ticketRepo.getTicketById(ticketId);
+    result.fold(
+      (failure) {
+        CustomToast.show(
+            message: failure.errMessage, backgroundColor: Colors.red);
+        emit(FetchTicketSuccess(tickets: List.from(allTickets)));
+      },
+      (ticket) {
+        emit(FetchTicketSuccess(tickets: List.from(allTickets)));
+      },
+    );
+    return result;
+  }
+
+  Future<void> searchTicket(String name) async {
+    emit(FetchTicketLoading());
+    var result = await ticketRepo.searchTicket(name: name);
+    result.fold(
+      (failure) {
+        emit(FetchTicketFailure(errMessage: failure.errMessage));
+      },
+      (tickets) {
+        emit(FetchTicketSuccess(tickets: tickets));
       },
     );
   }

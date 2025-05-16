@@ -105,37 +105,56 @@ class TicketsDetailsView extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Text(
-              S.of(context).quick_chat,
-              style: AppStyles.textStyle18bold,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomChatButton(
-                  title: S.of(context).chat_with_user,
-                  color: AppColors.activeBlue,
-                  onTap: () {
-                    final userId = ticket.user?.id;
-                    if (userId != null) {
-                      context.read<ChatCubit>().handleChatWithUser(
-                          userId, ticket.id.toString(), context);
-                    }
-                  },
-                ),
-                CustomChatButton(
-                  title: S.of(context).chat_with_ticket,
-                  color: AppColors.darkBlue,
-                  onTap: () {
-                    final ticketianId = ticket.technician?.user!.id;
-                    if (ticketianId != null) {
-                      context.read<ChatCubit>().handleChatWithUser(
-                          ticketianId, ticket.id.toString(), context);
-                    }
-                  },
-                ),
-              ],
-            )
+            if (ticket.status == 0) ...[
+              Text(
+                S.of(context).quick_chat,
+                style: AppStyles.textStyle18bold,
+              ),
+              CustomChatButton(
+                title: S.of(context).chat_with_user,
+                color: AppColors.activeBlue,
+                onTap: () {
+                  final userId = ticket.user?.id;
+                  if (userId != null) {
+                    context.read<ChatCubit>().handleChatWithUser(
+                        userId, ticket.id.toString(), context);
+                  }
+                },
+              ),
+            ] else if (ticket.status != 2) ...[
+              Text(
+                S.of(context).quick_chat,
+                style: AppStyles.textStyle18bold,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomChatButton(
+                    title: S.of(context).chat_with_user,
+                    color: AppColors.activeBlue,
+                    onTap: () {
+                      final userId = ticket.user?.id;
+                      if (userId != null) {
+                        context.read<ChatCubit>().handleChatWithUser(
+                            userId, ticket.id.toString(), context);
+                      }
+                    },
+                  ),
+                  if (ticket.technician?.user?.id != null)
+                    CustomChatButton(
+                      title: S.of(context).chat_with_ticket,
+                      color: AppColors.darkBlue,
+                      onTap: () {
+                        final ticketianId = ticket.technician?.user!.id;
+                        if (ticketianId != null) {
+                          context.read<ChatCubit>().handleChatWithUser(
+                              ticketianId, ticket.id.toString(), context);
+                        }
+                      },
+                    ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
@@ -175,7 +194,6 @@ class CustomWidget extends StatelessWidget {
 
 String? formatDateWithOrdinal(String? dateString) {
   if (dateString == null) return null;
-
   try {
     final date = DateTime.parse(dateString);
     final month = DateFormat('MMMM').format(date);

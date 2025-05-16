@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:manager_app/core/constant/app_colors.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/widget/custom_text_field.dart';
+import 'package:manager_app/core/widget/custom_toast.dart';
 import 'package:manager_app/features/add_ticketian/data/model/ticketian_model/ticketian_model.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
 import 'package:manager_app/generated/l10n.dart';
@@ -94,56 +96,139 @@ class TicketianCard extends StatelessWidget {
     final emailController = TextEditingController(text: ticketian.user!.email!);
     final phoneController =
         TextEditingController(text: ticketian.user?.phone ?? "N/A");
-    final passwordController = TextEditingController(text: "***********");
-    final confirmPassController = TextEditingController(text: "**********");
-    SmartDialog.show(
-      builder: (_) => AlertDialog(
-        title: Text(S.of(context).edit_ticketian),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomTextfield(
-              hintText: S.of(context).name,
-              controller: nameController,
+    final passwordController = TextEditingController();
+    final confirmPassController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => BlocListener<AddTicketianCubit, AddTicketianState>(
+        listener: (context, state) {
+          if (state is EditTicketianSuccess) {
+            Navigator.pop(context);
+            CustomToast.show(
+              message: S.of(context).Profile_updated,
+              backgroundColor: AppColors.toastColor,
+            );
+          } else if (state is EditTicketianFailure) {
+            CustomToast.show(
+              message: state.errMessage,
+              backgroundColor: Colors.red,
+            );
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  S.of(context).edit_ticketian,
+                  style: AppStyles.textStyle18bold,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                CustomTextfield(
+                  hintText: S.of(context).name,
+                  controller: nameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return S.of(context).name;
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextfield(
+                  hintText: S.of(context).email,
+                  controller: emailController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return S.of(context).enter_valid_email;
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                CustomTextfield(
+                  hintText: S.of(context).phone,
+                  controller: phoneController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return S.of(context).enter_valid_phone;
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextfield(
+                  hintText: S.of(context).password,
+                  controller: passwordController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return S.of(context).pass_short;
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextfield(
+                  hintText: S.of(context).confirmPassword,
+                  controller: confirmPassController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return S.of(context).confirmPassword;
+                    }
+                    if (value != passwordController.text) {
+                      return S.of(context).pass_not_match;
+                    }
+                    return null;
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(S.of(context).cancel),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState?.validate() ?? false) {
+                          context.read<AddTicketianCubit>().editTicketian(
+                                id: ticketian.id!,
+                                name: nameController.text,
+                                email: emailController.text,
+                                phone: phoneController.text,
+                                password: passwordController.text,
+                                confirmPass: confirmPassController.text,
+                              );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.darkBlue,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text(S.of(context).save),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+              ],
             ),
-            CustomTextfield(
-              hintText: S.of(context).email,
-              controller: emailController,
-            ),
-            CustomTextfield(
-              hintText: S.of(context).phone,
-              controller: phoneController,
-            ),
-            CustomTextfield(
-              hintText: S.of(context).password,
-              controller: passwordController,
-            ),
-            CustomTextfield(
-              hintText: S.of(context).confirmPassword,
-              controller: confirmPassController,
-            ),
-          ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => SmartDialog.dismiss(),
-            child: Text(S.of(context).cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              context.read<AddTicketianCubit>().editTicketian(
-                    id: ticketian.id!,
-                    name: nameController.text,
-                    email: emailController.text,
-                    phone: phoneController.text,
-                    password: passwordController.text,
-                    confirmPass: confirmPassController.text,
-                  );
-              SmartDialog.dismiss();
-            },
-            child: Text(S.of(context).save),
-          ),
-        ],
       ),
     );
   }

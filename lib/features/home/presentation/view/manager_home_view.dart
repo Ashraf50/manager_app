@@ -46,29 +46,33 @@ class _ManagerHomeViewState extends State<ManagerHomeView> {
             child: BlocBuilder<NotificationCubit, NotificationState>(
               builder: (context, state) {
                 if (state is FetchNotificationSuccess) {
+                  final unseenCount =
+                      state.notifications.where((n) => !n.seen!).length;
                   return IconButton(
                     onPressed: () {
                       context.push('/notification_view');
                     },
-                    icon: Badge.count(
-                      count: state.notifications.where((n) => !n.seen!).length,
-                      child: const Icon(
-                        Icons.notifications,
-                        size: 27,
-                      ),
-                    ),
+                    icon: unseenCount > 0
+                        ? Badge.count(
+                            count: unseenCount,
+                            child: const Icon(
+                              Icons.notifications,
+                              size: 27,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.notifications,
+                            size: 27,
+                          ),
                   );
                 } else if (state is FetchNotificationEmpty) {
                   return IconButton(
                     onPressed: () {
                       context.push('/notification_view');
                     },
-                    icon: Badge.count(
-                      count: 0,
-                      child: const Icon(
-                        Icons.notifications,
-                        size: 27,
-                      ),
+                    icon: const Icon(
+                      Icons.notifications,
+                      size: 27,
                     ),
                   );
                 } else {

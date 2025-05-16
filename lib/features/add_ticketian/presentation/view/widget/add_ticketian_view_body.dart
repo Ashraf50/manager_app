@@ -9,12 +9,23 @@ import '../../../../../../../core/constant/app_styles.dart';
 import '../../../../../../../core/widget/custom_search.dart';
 import '../../../../all_tickets/presentation/view/widget/add_button.dart';
 
-class AddTicketianViewBody extends StatelessWidget {
+class AddTicketianViewBody extends StatefulWidget {
   const AddTicketianViewBody({super.key});
 
   @override
+  State<AddTicketianViewBody> createState() => _AddTicketianViewBodyState();
+}
+
+class _AddTicketianViewBodyState extends State<AddTicketianViewBody> {
+  final TextEditingController searchController = TextEditingController();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
     final cubit = context.read<AddTicketianCubit>();
     return CustomScaffold(
       backgroundColor: Colors.white,
@@ -26,14 +37,14 @@ class AddTicketianViewBody extends StatelessWidget {
             if (state is FetchAllTicketianSuccess) {
               ticketianCount = state.ticketian.length;
             }
-            return ListView(
+            return Column(
               children: [
                 CustomSearch(
                   controller: searchController,
                   hintText: S.of(context).search,
                   prefixIcon: const Icon(Icons.search, color: Colors.grey),
                   onChange: (value) {
-                    if (value.isEmpty) {
+                    if (value.trim().isEmpty) {
                       cubit.fetchTicketian();
                     } else {
                       cubit.searchTicketian(value);
@@ -69,10 +80,7 @@ class AddTicketianViewBody extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const AllTicketianListView(),
-                const SizedBox(
-                  height: 40,
-                )
+                const Expanded(child: AllTicketianListView()),
               ],
             );
           },

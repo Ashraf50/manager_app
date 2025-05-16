@@ -72,12 +72,12 @@ class AddTicketianCubit extends Cubit<AddTicketianState> {
       confirmPass: confirmPass,
     );
     result.fold(
-      (failure) {
-        CustomToast.show(
-            message: failure.errMessage, backgroundColor: Colors.red);
-        fetchTicketian();
+      (failure) async {
+        emit(EditTicketianFailure(errMessage: failure.errMessage));
+        await fetchTicketian();
       },
       (_) async {
+        emit(EditTicketianSuccess());
         await fetchTicketian();
       },
     );

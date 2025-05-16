@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../add_ticketian/presentation/view/widget/all_ticketian_list_view.dart';
 import '../../view_model/cubit/ticket_cubit.dart';
 import 'ticket_card.dart';
 
@@ -96,7 +97,7 @@ class _AllTicketsListViewState extends State<AllTicketsListView> {
                 },
               );
             } else if (state is FetchTicketLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return buildShimmerLoading();
             } else if (state is FetchTicketFailure) {
               return Center(child: Text(state.errMessage));
             } else {

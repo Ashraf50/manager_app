@@ -56,32 +56,49 @@ class TicketCard extends StatelessWidget {
                   ),
                 ],
               ),
-              StatusButton(
-                status: status,
-              ),
-              PopupMenuButton(
-                color: Colors.white,
-                icon: const Icon(Icons.more_vert),
-                itemBuilder: (BuildContext context) => [
-                  PopupMenuItem(
-                    value: 'assign',
-                    child: Text(S.of(context).assign),
+              Row(
+                children: [
+                  StatusButton(
+                    status: status,
                   ),
-                  PopupMenuItem(
-                    value: 'finish',
-                    child: Text(S.of(context).finish),
-                  ),
+                  if (status == 0 || status == 1)
+                    PopupMenuButton(
+                      color: Colors.white,
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) {
+                        final List<PopupMenuItem> items = [];
+                        if (status == 0) {
+                          items.add(
+                            PopupMenuItem(
+                              value: 'assign',
+                              child: Text(S.of(context).assign),
+                            ),
+                          );
+                        }
+                        if (status == 1) {
+                          items.add(
+                            PopupMenuItem(
+                              value: 'finish',
+                              child: Text(S.of(context).finish),
+                            ),
+                          );
+                        }
+                        return items;
+                      },
+                      onSelected: (value) {
+                        if (value == 'assign') {
+                          context.push(
+                            '/assign_ticket',
+                            extra: id,
+                          );
+                        } else if (value == 'finish') {
+                          _showFinishDialog(context);
+                        }
+                      },
+                    )
+                  else
+                    const SizedBox(width: 40), // Placeholder for alignment
                 ],
-                onSelected: (value) {
-                  if (value == 'assign') {
-                    context.push(
-                      '/assign_ticket',
-                      extra: id,
-                    );
-                  } else if (value == 'finish') {
-                    _showFinishDialog(context);
-                  }
-                },
               ),
             ],
           ),

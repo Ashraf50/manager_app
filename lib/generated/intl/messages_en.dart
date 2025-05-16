@@ -71,6 +71,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dailyRespond": MessageLookupByLibrary.simpleMessage("Daily Respond"),
         "dashboard": MessageLookupByLibrary.simpleMessage("Dashboard"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
+        "delete_all": MessageLookupByLibrary.simpleMessage("Delete All"),
         "delete_for_all":
             MessageLookupByLibrary.simpleMessage("Delete for all"),
         "details": MessageLookupByLibrary.simpleMessage("Details"),
@@ -104,6 +105,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "no_details":
             MessageLookupByLibrary.simpleMessage("No Details Available"),
         "no_messages": MessageLookupByLibrary.simpleMessage("No Messages yet"),
+        "no_ticketian":
+            MessageLookupByLibrary.simpleMessage("No ticketian available"),
         "no_tickets": MessageLookupByLibrary.simpleMessage("No Tickets"),
         "notification": MessageLookupByLibrary.simpleMessage("Notification"),
         "notification_deleted_successfully":
@@ -122,6 +125,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "phone": MessageLookupByLibrary.simpleMessage("Phone"),
         "quick_chat": MessageLookupByLibrary.simpleMessage("Quick Chat"),
         "read": MessageLookupByLibrary.simpleMessage("Read"),
+        "read_all": MessageLookupByLibrary.simpleMessage("Rad All"),
         "recentTickets": MessageLookupByLibrary.simpleMessage("Recent Tickets"),
         "reset_desc1":
             MessageLookupByLibrary.simpleMessage("We well send an email with"),

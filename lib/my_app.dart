@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:manager_app/core/routing/app_router.dart';
@@ -26,7 +27,7 @@ import 'features/Auth/presentation/view_model/bloc/auth_bloc.dart';
 import 'features/home/data/repo/user_repo_impl.dart';
 import 'features/settings/presentation/view_model/language_bloc/language_bloc.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final AppRouter appRouter;
   final String token;
   const MyApp({
@@ -36,6 +37,26 @@ class MyApp extends StatelessWidget {
   });
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _setupInitialMessage();
+  }
+
+  void _setupInitialMessage() async {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      FirebaseNotificationsHelper(context)
+          .handleNotificationClick(initialMessage);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -43,8 +64,8 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(AuthRepoImpl(ApiHelper())),
         ),
         BlocProvider(
-          create: (context) =>
-              UserDataCubit(UserRepoImpl(ApiHelper()))..fetchUserData(token),
+          create: (context) => UserDataCubit(UserRepoImpl(ApiHelper()))
+            ..fetchUserData(widget.token),
         ),
         BlocProvider(
           create: (context) => AddTicketianCubit(TicketianRepoImpl(ApiHelper()))
@@ -87,7 +108,7 @@ class MyApp extends StatelessWidget {
             return MaterialApp.router(
               builder: FlutterSmartDialog.init(),
               theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-              routerConfig: appRouter.router,
+              routerConfig: widget.appRouter.router,
               debugShowCheckedModeBanner: false,
               locale:
                   state is AppChangeLanguage ? Locale(state.langCode) : null,

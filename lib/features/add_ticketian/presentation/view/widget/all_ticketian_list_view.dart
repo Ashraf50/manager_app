@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:manager_app/generated/l10n.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:manager_app/features/add_ticketian/presentation/view_model/cubit/add_ticketian_cubit.dart';
 import 'ticketian_card.dart';
@@ -28,8 +29,12 @@ class _AllTicketianListViewState extends State<AllTicketianListView> {
         child: BlocBuilder<AddTicketianCubit, AddTicketianState>(
           builder: (context, state) {
             if (state is FetchAllTicketianSuccess) {
+              if (state.ticketian.isEmpty) {
+                return Center(
+                  child: Text(S.of(context).no_ticketian),
+                );
+              }
               return ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: state.ticketian.length,
                 itemBuilder: (context, index) {
@@ -61,7 +66,7 @@ class _AllTicketianListViewState extends State<AllTicketianListView> {
                 },
               );
             } else if (state is FetchAllTicketianLoading) {
-              return _buildShimmerLoading();
+              return buildShimmerLoading();
             } else if (state is FetchAllTicketianFailure) {
               return Center(
                 child: Text(state.errMessage),
@@ -74,65 +79,65 @@ class _AllTicketianListViewState extends State<AllTicketianListView> {
       ),
     );
   }
+}
 
-  Widget _buildShimmerLoading() {
-    return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Shimmer.fromColors(
-          baseColor: Colors.grey[300]!,
-          highlightColor: Colors.grey[100]!,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
+Widget buildShimmerLoading() {
+  return ListView.builder(
+    physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: 5,
+    itemBuilder: (context, index) {
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 200,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 24,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(4),
                       ),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: 200,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  height: 1,
-                  color: Colors.white,
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 1,
+                color: Colors.white,
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
 }

@@ -6,4 +6,6 @@ abstract class NotificationRepo {
   Future<List<NotificationModel>> fetchAllNotifications({int page = 1});
   Future<Either<Failure, Unit>> deleteNotification(String id);
   Future<Either<Failure, Unit>> markNotificationAsRead(String id);
+  Future<Either<Failure, Unit>> deleteAllNotifications();
+  Future<Either<Failure, Unit>> markAllNotificationsAsRead();
 }

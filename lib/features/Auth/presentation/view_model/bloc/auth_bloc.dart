@@ -16,6 +16,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             password: event.password,
           );
           if (result['type'] == 'error') {
+            const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+            await secureStorage.delete(key: 'auth_token');
+            await secureStorage.delete(key: 'refresh_token');
+            await secureStorage.delete(key: 'user_id');
             emit(LoginFailure(errMessage: result['message']));
           } else if (result['type'] == 'success') {
             final user = result['data']['user'];
@@ -34,6 +38,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             await secureStorage.write(key: 'user_id', value: userId);
           }
         } catch (e) {
+          const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+          await secureStorage.delete(key: 'auth_token');
+          await secureStorage.delete(key: 'refresh_token');
+          await secureStorage.delete(key: 'user_id');
           emit(LoginFailure(errMessage: e.toString()));
         }
       } else if (event is ForgetPassEvent) {

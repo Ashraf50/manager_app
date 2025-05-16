@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:manager_app/core/widget/custom_toast.dart';
+import 'package:manager_app/features/all_tickets/presentation/view_model/cubit/ticket_cubit.dart';
 import 'package:manager_app/features/notification/presentation/view/widget/notification_card.dart';
 import 'package:manager_app/features/notification/presentation/view/widget/notification_shimmer.dart';
 import 'package:manager_app/features/notification/presentation/view_model/cubit/notification_cubit.dart';
@@ -55,55 +57,61 @@ class _AllNotificationsListViewState extends State<AllNotificationsListView> {
             itemCount: state.notifications.length,
             itemBuilder: (context, index) {
               var notifications = state.notifications;
-              return AnimatedBuilder(
-                animation: _scrollController,
-                builder: (context, child) {
-                  final itemPosition = index * 100.0;
-                  final scrollPosition = _scrollController.position.pixels;
-                  final opacity =
-                      (1.0 - (scrollPosition - itemPosition).abs() / 1000)
-                          .clamp(0.0, 1.0);
-                  final scale =
-                      (1.0 - (scrollPosition - itemPosition).abs() / 2000)
-                          .clamp(0.8, 1.0);
-
-                  return Transform.scale(
-                    scale: scale,
-                    child: Opacity(
-                      opacity: opacity,
+              return TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: 1),
+                duration: Duration(milliseconds: 500 + (index * 100)),
+                curve: Curves.easeOut,
+                builder: (context, value, child) {
+                  return Opacity(
+                    opacity: value,
+                    child: Transform.translate(
+                      offset: Offset(0, 30 * (1 - value)),
                       child: child,
                     ),
                   );
                 },
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(1, 0),
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(
-                    parent: AnimationController(
-                      vsync: Navigator.of(context),
-                      duration: const Duration(milliseconds: 300),
-                    )..forward(),
-                    curve: Curves.easeOut,
-                  )),
-                  child: InkWell(
-                    onTap: () {
-                      context.push(
-                        "/notification_details",
-                        extra: notifications[index],
-                      );
-                      if (notifications[index].seen == false) {
-                        context
-                            .read<ReadNotificationCubit>()
-                            .readNotification(notifications[index].id!);
+                child: InkWell(
+                  onTap: () async {
+                    final notification = notifications[index];
+                    if (notification.seen == false) {
+                      context
+                          .read<ReadNotificationCubit>()
+                          .readNotification(notification.id!);
+                    }
+                    final data = notification.data?.toJson();
+                    if (data != null &&
+                        (data['type'] == 'ticket_created' ||
+                            data['type'] == 'ticket_updated' ||
+                            data['type'] == 'ticket_assigned' ||
+                            data['type'] == 'ticket_resolved')) {
+                      try {
+                        final modelId = data['model_id'];
+                        if (modelId != null) {
+                          final ticketCubit = context.read<TicketCubit>();
+                          final result = await ticketCubit
+                              .getTicketById(int.parse(modelId.toString()));
+                          result.fold(
+                            (failure) {
+                              CustomToast.show(
+                                message: failure.errMessage,
+                                backgroundColor: Colors.red,
+                              );
+                            },
+                            (ticket) {
+                              context.push('/ticket_details', extra: ticket);
+                            },
+                          );
+                        }
+                      } catch (e) {
+                        print('Error handling ticket notification: $e');
                       }
-                    },
-                    child: NotificationCard(
-                      notification: notifications[index],
-                      notificationColor: notifications[index].seen!
-                          ? Colors.white
-                          : const Color.fromARGB(99, 210, 207, 207),
-                    ),
+                    }
+                  },
+                  child: NotificationCard(
+                    notification: notifications[index],
+                    notificationColor: notifications[index].seen!
+                        ? Colors.white
+                        : const Color.fromARGB(99, 210, 207, 207),
                   ),
                 ),
               );

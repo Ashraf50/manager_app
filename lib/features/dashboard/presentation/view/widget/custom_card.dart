@@ -107,8 +107,8 @@ class _CustomCardState extends State<CustomCard>
             child: LayoutBuilder(
               builder: (context, constraints) {
                 return Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     AnimatedBuilder(
@@ -148,8 +148,8 @@ class _CustomCardState extends State<CustomCard>
                           child: Text(
                             widget.title,
                             style: AppStyles.textStyle16Black,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                            // overflow: TextOverflow.ellipsis,
+                            // maxLines: 1,
                           ),
                         ),
                         SizedBox(width: 8.w),

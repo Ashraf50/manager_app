@@ -16,4 +16,6 @@ abstract class TicketRepo {
   Future<Either<Failure, Unit>> finishTicket({
     required int ticketId,
   });
+  Future<Either<Failure, TicketModel>> getTicketById(int ticketId);
+  Future<Either<Failure, List<TicketModel>>> searchTicket({required String name});
 }

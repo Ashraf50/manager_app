@@ -15,3 +15,10 @@ final class FetchAllTicketianFailure extends AddTicketianState {
   final String errMessage;
   FetchAllTicketianFailure({required this.errMessage});
 }
+
+final class EditTicketianSuccess extends AddTicketianState {}
+
+final class EditTicketianFailure extends AddTicketianState {
+  final String errMessage;
+  EditTicketianFailure({required this.errMessage});
+}

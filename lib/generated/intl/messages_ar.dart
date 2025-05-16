@@ -72,6 +72,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "dailyRespond": MessageLookupByLibrary.simpleMessage("الرد اليومي"),
         "dashboard": MessageLookupByLibrary.simpleMessage("لوحة التحكم"),
         "delete": MessageLookupByLibrary.simpleMessage("حذف"),
+        "delete_all": MessageLookupByLibrary.simpleMessage("حذف الكل"),
         "delete_for_all": MessageLookupByLibrary.simpleMessage("حذف للجميع"),
         "details": MessageLookupByLibrary.simpleMessage("التفاصيل"),
         "edit": MessageLookupByLibrary.simpleMessage("تعديل"),
@@ -106,6 +107,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("لا توجد تفاصيل متاحة"),
         "no_messages":
             MessageLookupByLibrary.simpleMessage("لا توجد رسائل بعد"),
+        "no_ticketian":
+            MessageLookupByLibrary.simpleMessage("لا يوجد مسؤول تذاكر متاح"),
         "no_tickets": MessageLookupByLibrary.simpleMessage("لا توجد تذاكر"),
         "notification": MessageLookupByLibrary.simpleMessage("الإشعارات"),
         "notification_deleted_successfully":
@@ -123,6 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "phone": MessageLookupByLibrary.simpleMessage("رقم الهاتف"),
         "quick_chat": MessageLookupByLibrary.simpleMessage("دردشة سريعة"),
         "read": MessageLookupByLibrary.simpleMessage("مقروء"),
+        "read_all": MessageLookupByLibrary.simpleMessage("قراءة الكل"),
         "recentTickets": MessageLookupByLibrary.simpleMessage("أحدث التذاكر"),
         "reset_desc1": MessageLookupByLibrary.simpleMessage(
             "سوف نرسل لك بريدًا إلكترونيًا يحتوي على"),

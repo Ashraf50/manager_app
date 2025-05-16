@@ -24,4 +24,22 @@ class ReadNotificationCubit extends Cubit<ReadNotificationState> {
       (_) => emit(DeleteNotificationSuccess()),
     );
   }
+
+  Future<void> deleteAllNotifications() async {
+    emit(DeleteNotificationLoading());
+    final result = await notificationRepo.deleteAllNotifications();
+    result.fold(
+      (failure) => emit(DeleteNotificationFailure(failure.errMessage)),
+      (_) => emit(DeleteNotificationSuccess()),
+    );
+  }
+
+  Future<void> readAllNotifications() async {
+    emit(ReadNotificationLoading());
+    final result = await notificationRepo.markAllNotificationsAsRead();
+    result.fold(
+      (failure) => emit(ReadNotificationFailure(failure.errMessage)),
+      (_) => emit(ReadNotificationSuccess(notificationId: 'all')),
+    );
+  }
 }

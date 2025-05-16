@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:go_router/go_router.dart';
 import 'package:manager_app/core/constant/app_styles.dart';
 import 'package:manager_app/core/constant/func/data_format.dart';
 import 'package:manager_app/features/notification/data/model/notification_model/notification_model.dart';
@@ -35,28 +34,24 @@ class NotificationCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () => _handleCardTap(context),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildNotificationIcon(colorScheme),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildNotificationContent(context, colorScheme),
-                  ),
-                  _buildMoreOptionsButton(context, colorScheme),
-                ],
-              ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildNotificationIcon(colorScheme),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildNotificationContent(context, colorScheme),
+                ),
+                _buildMoreOptionsButton(context, colorScheme),
+              ],
             ),
-            if (!notification.seen!) _buildUnreadIndicator(colorScheme),
-          ],
-        ),
+          ),
+          if (!notification.seen!) _buildUnreadIndicator(colorScheme),
+        ],
       ),
     );
   }
@@ -97,7 +92,7 @@ class NotificationCard extends StatelessWidget {
             color: colorScheme.onSurfaceVariant.withOpacity(0.7),
             height: 1.3,
           ),
-          maxLines: 1,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 8),
@@ -145,24 +140,29 @@ class NotificationCard extends StatelessWidget {
 
   List<PopupMenuItem> _buildPopupMenuItems(
       BuildContext context, ColorScheme colorScheme) {
-    return [
-      PopupMenuItem(
-        value: 'read',
-        child: Row(
-          children: [
-            Icon(
-              Icons.check_circle_outline,
-              size: 18,
-              color: colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              S.of(context).read,
-              style: TextStyle(color: colorScheme.onSurface),
-            ),
-          ],
+    final List<PopupMenuItem> items = [];
+    if (!notification.seen!) {
+      items.add(
+        PopupMenuItem(
+          value: 'read',
+          child: Row(
+            children: [
+              Icon(
+                Icons.check_circle_outline,
+                size: 18,
+                color: colorScheme.primary,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                S.of(context).read,
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
+            ],
+          ),
         ),
-      ),
+      );
+    }
+    items.add(
       PopupMenuItem(
         value: 'delete',
         child: Row(
@@ -180,7 +180,8 @@ class NotificationCard extends StatelessWidget {
           ],
         ),
       ),
-    ];
+    );
+    return items;
   }
 
   Widget _buildUnreadIndicator(ColorScheme colorScheme) {
@@ -206,15 +207,15 @@ class NotificationCard extends StatelessWidget {
     );
   }
 
-  void _handleCardTap(BuildContext context) {
-    context.push(
-      "/notification_details",
-      extra: notification,
-    );
-    if (!notification.seen!) {
-      context.read<ReadNotificationCubit>().readNotification(notification.id!);
-    }
-  }
+  // void _handleCardTap(BuildContext context) {
+  //   context.push(
+  //     "/notification_details",
+  //     extra: notification,
+  //   );
+  //   if (!notification.seen!) {
+  //     context.read<ReadNotificationCubit>().readNotification(notification.id!);
+  //   }
+  // }
 
   void _handlePopupMenuSelection(BuildContext context, String value) {
     if (value == 'read') {

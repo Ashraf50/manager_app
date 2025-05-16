@@ -68,4 +68,42 @@ class NotificationRepoImpl implements NotificationRepo {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> deleteAllNotifications() async {
+    try {
+      final token = await getToken();
+      await apiHelper.delete(
+        '${AppStrings.baseUrl}/notifications',
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return const Right(unit);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDiorError(e));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> markAllNotificationsAsRead() async {
+    try {
+      final token = await getToken();
+      await apiHelper.patch(
+        '${AppStrings.baseUrl}/notifications',
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      return const Right(unit);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDiorError(e));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

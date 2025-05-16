@@ -108,4 +108,48 @@ class TicketRepoImpl implements TicketRepo {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, TicketModel>> getTicketById(int ticketId) async {
+    try {
+      final token = await getToken();
+      var response = await apiHelper.get(
+        '${AppStrings.baseUrl}/api/managers/tickets/$ticketId',
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      var data = response.data;
+      var ticket = TicketModel.fromJson(data["data"]);
+      return Right(ticket);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDiorError(e));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TicketModel>>> searchTicket(
+      {required String name}) async {
+    try {
+      final token = await getToken();
+      final response = await apiHelper.get(
+        '${AppStrings.baseUrl}/api/managers/tickets?handle=$name',
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+      var data = response.data;
+      var ticketList =
+          (data["data"] as List).map((e) => TicketModel.fromJson(e)).toList();
+      return Right(ticketList);
+    } catch (e) {
+      if (e is DioException) {
+        return Left(ServerFailure.fromDiorError(e));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

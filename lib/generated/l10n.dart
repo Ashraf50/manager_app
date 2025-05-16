@@ -1109,6 +1109,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Delete All`
+  String get delete_all {
+    return Intl.message(
+      'Delete All',
+      name: 'delete_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rad All`
+  String get read_all {
+    return Intl.message(
+      'Rad All',
+      name: 'read_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No ticketian available`
+  String get no_ticketian {
+    return Intl.message(
+      'No ticketian available',
+      name: 'no_ticketian',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

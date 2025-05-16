@@ -82,61 +82,56 @@ class DashboardTicketDetails extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(12)),
-              child: Column(
+            if (ticket.status == 0) ...[
+              Text(
+                S.of(context).quick_chat,
+                style: AppStyles.textStyle18bold,
+              ),
+              CustomChatButton(
+                title: S.of(context).chat_with_user,
+                color: AppColors.activeBlue,
+                onTap: () {
+                  final userId = ticket.user?.id;
+                  if (userId != null) {
+                    context.read<ChatCubit>().handleChatWithUser(
+                        userId, ticket.id.toString(), context);
+                  }
+                },
+              ),
+            ] else if (ticket.status != 2) ...[
+              Text(
+                S.of(context).quick_chat,
+                style: AppStyles.textStyle18bold,
+              ),
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "${S.of(context).details}: ",
-                    style: AppStyles.textStyle18bold,
+                  CustomChatButton(
+                    title: S.of(context).chat_with_user,
+                    color: AppColors.activeBlue,
+                    onTap: () {
+                      final userId = ticket.user?.id;
+                      if (userId != null) {
+                        context.read<ChatCubit>().handleChatWithUser(
+                            userId, ticket.id.toString(), context);
+                      }
+                    },
                   ),
-                  SelectableText(
-                    ticket.description ?? S.of(context).no_details,
-                    style: AppStyles.textStyle18black,
-                  ),
+                  if (ticket.technician?.user?.id != null)
+                    CustomChatButton(
+                      title: S.of(context).chat_with_ticket,
+                      color: AppColors.darkBlue,
+                      onTap: () {
+                        final ticketianId = ticket.technician?.user!.id;
+                        if (ticketianId != null) {
+                          context.read<ChatCubit>().handleChatWithUser(
+                              ticketianId, ticket.id.toString(), context);
+                        }
+                      },
+                    ),
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              S.of(context).quick_chat,
-              style: AppStyles.textStyle18bold,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomChatButton(
-                  title: S.of(context).chat_with_user,
-                  color: AppColors.activeBlue,
-                  onTap: () {
-                    final userId = ticket.user?.id;
-                    if (userId != null) {
-                      context.read<ChatCubit>().handleChatWithUser(
-                          userId, ticket.id.toString(), context);
-                    }
-                  },
-                ),
-                CustomChatButton(
-                  title: S.of(context).chat_with_ticket,
-                  color: AppColors.darkBlue,
-                  onTap: () {
-                    final ticketianId = ticket.technician?.user!.id;
-                    if (ticketianId != null) {
-                      context.read<ChatCubit>().handleChatWithUser(
-                          ticketianId, ticket.id.toString(), context);
-                    }
-                  },
-                ),
-              ],
-            )
+            ],
           ],
         ),
       ),

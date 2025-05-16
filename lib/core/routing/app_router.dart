@@ -7,9 +7,7 @@ import 'package:manager_app/features/all_tickets/presentation/view/widget/assign
 import 'package:manager_app/features/chat/presentation/view/chat_details_view.dart';
 import 'package:manager_app/features/dashboard/data/model/statistics/recent_ticket.dart';
 import 'package:manager_app/features/home/presentation/view/widget/edit_profile_view.dart';
-import 'package:manager_app/features/notification/data/model/notification_model/notification_model.dart';
 import 'package:manager_app/features/notification/presentation/view/notification_view.dart';
-import 'package:manager_app/features/notification/presentation/view/widget/notification_details_view_body.dart';
 import '../../features/Auth/presentation/view/forget_password_view.dart';
 import '../../features/Auth/presentation/view/sign_in_view.dart';
 import '../../features/chat/data/model/chat_detailing_args.dart';
@@ -99,12 +97,6 @@ class AppRouter {
         path: '/notification_view',
         builder: (context, state) => const NotificationView(),
       ),
-      GoRoute(
-          path: '/notification_details',
-          builder: (context, state) {
-            var notification = state.extra as NotificationModel;
-            return NotificationDetailsViewBody(notification: notification);
-          }),
     ],
   );
 }
