@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../data/repo/auth_repo.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepo authRepo;
+
   AuthBloc(this.authRepo) : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
       if (event is LoginEvent) {
@@ -16,35 +16,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             password: event.password,
           );
           if (result['type'] == 'error') {
-            const FlutterSecureStorage secureStorage = FlutterSecureStorage();
-            await secureStorage.delete(key: 'auth_token');
-            await secureStorage.delete(key: 'refresh_token');
-            await secureStorage.delete(key: 'user_id');
+            await authRepo.clearTokens();
             emit(LoginFailure(errMessage: result['message']));
           } else if (result['type'] == 'success') {
             final user = result['data']['user'];
-            if (user['type'] != 2) {
-              emit(LoginFailure(errMessage: 'This account is not a manager.'));
-              return;
-            }
             final token = result['data']['token'];
             final refreshToken = result['data']['refresh_token'];
             final userId = user['id'].toString();
+            await authRepo.saveTokens(token, refreshToken, userId);
             emit(LoginSuccess(successMessage: result['message'], token: token));
-            const FlutterSecureStorage secureStorage = FlutterSecureStorage();
-            await secureStorage.write(key: 'auth_token', value: token);
-            await secureStorage.write(
-                key: 'refresh_token', value: refreshToken);
-            await secureStorage.write(key: 'user_id', value: userId);
           }
         } catch (e) {
-          const FlutterSecureStorage secureStorage = FlutterSecureStorage();
-          await secureStorage.delete(key: 'auth_token');
-          await secureStorage.delete(key: 'refresh_token');
-          await secureStorage.delete(key: 'user_id');
-          emit(LoginFailure(errMessage: e.toString()));
+          await authRepo.clearTokens();
+          emit(LoginFailure(errMessage: _parseError(e)));
         }
-      } else if (event is ForgetPassEvent) {
+      }
+      else if (event is ForgetPassEvent) {
         emit(ForgetLoading());
         try {
           final result = await authRepo.forgetPassword(email: event.email);
@@ -59,9 +46,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(ForgetSuccess(successMessage: result['message']));
           }
         } catch (e) {
-          emit(ForgetFailure(errMessage: e.toString()));
+          emit(ForgetFailure(errMessage: _parseError(e)));
         }
-      } else if (event is ResetPassEvent) {
+      }
+      else if (event is ResetPassEvent) {
         emit(ResetLoading());
         try {
           final result = await authRepo.resetPassword(
@@ -73,17 +61,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           if (result['type'] == 'error') {
             emit(ResetFailure(errMessage: result['message']));
           } else if (result['type'] == 'success') {
-            final user = result['data']['user'];
-            if (user != null && user['type'] != 2) {
-              emit(ResetFailure(errMessage: 'This account is not a manager.'));
-              return;
-            }
             emit(ResetSuccess(successMessage: result['message']));
           }
         } catch (e) {
-          emit(ResetFailure(errMessage: e.toString()));
+          emit(ResetFailure(errMessage: _parseError(e)));
         }
-      } else if (event is VerifyCodeEvent) {
+      }
+      else if (event is VerifyCodeEvent) {
         emit(VerifyCodeLoading());
         try {
           final result = await authRepo.verifyCode(
@@ -98,18 +82,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             }
             emit(VerifyCodeFailure(errMessage: errorMessage));
           } else if (result['type'] == 'success') {
-            final user = result['data']['user'];
-            if (user != null && user['type'] != 2) {
-              emit(VerifyCodeFailure(
-                  errMessage: 'This account is not a manager.'));
-              return;
-            }
             emit(VerifyCodeSuccess(successMessage: result['message']));
           }
         } catch (e) {
-          emit(VerifyCodeFailure(errMessage: e.toString()));
+          emit(VerifyCodeFailure(errMessage: _parseError(e)));
         }
       }
     });
+  }
+
+  String _parseError(Object e) {
+    if (e is Exception) {
+      return e.toString().replaceAll('Exception:', '').trim();
+    }
+    return 'Something went wrong';
   }
 }
